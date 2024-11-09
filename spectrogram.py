@@ -1,5 +1,9 @@
+import os
 import sys
+import tempfile
+
 import numpy as np
+import soundfile as sf
 import librosa
 from PyQt5.QtWidgets import (QApplication, QVBoxLayout, QHBoxLayout, QSlider, QLabel,
                              QWidget, QPushButton, QComboBox, QFileDialog)
@@ -85,7 +89,7 @@ class SignalEqualizerUI(QWidget):
         self.resize(800, 600)
 
         main_layout = QVBoxLayout(self)
-        self.spectrogram_widget = SpectrogramWidget()
+        self.spectrogram_widget = SpectrogramWidget()  # Assuming SpectrogramWidget is defined elsewhere
         main_layout.addWidget(self.spectrogram_widget)
 
         self.slider_values = [1.0] * 10
@@ -113,7 +117,7 @@ class SignalEqualizerUI(QWidget):
 
         control_layout = QHBoxLayout()
         load_button = QPushButton("Load Signal")
-        load_button.clicked.connect(self.load_audio_file)  # load_audio_file method to load audio
+        load_button.clicked.connect(self.load_audio_file)
         control_layout.addWidget(load_button)
 
         self.mode_selector = QComboBox()
@@ -121,17 +125,16 @@ class SignalEqualizerUI(QWidget):
             ["Uniform Range Mode", "Musical Instruments Mode", "Animal Sounds Mode", "ECG Abnormalities Mode"])
         control_layout.addWidget(self.mode_selector)
 
-        # Audio Player Controls
-        self.play_button = QPushButton("Play Audio")
-        self.play_button.clicked.connect(self.toggle_playback)
+        # Add the Play Button
+        self.play_button = QPushButton("Play")
+        self.play_button.clicked.connect(self.play_audio)
         control_layout.addWidget(self.play_button)
 
         main_layout.addLayout(control_layout)
 
-        # Audio player setup
-        self.player = QMediaPlayer(self)
-        self.audio_file = None  # To hold the loaded audio file
-        self.player.setVolume(50)  # Set volume to 100%
+        # Create the QMediaPlayer to play the audio
+        self.player = QMediaPlayer()
+        self.player.setVolume(100)  # Set volume to 100%
 
         self.data = None
         self.sample_rate = 44100
@@ -148,24 +151,12 @@ class SignalEqualizerUI(QWidget):
                 # Plot the spectrogram of the loaded audio
                 self.spectrogram_widget.plot_spectrogram(self.data, self.sample_rate, title="Audio File Spectrogram")
 
-                # Set the QMediaContent and play the audio
-                audio_url = QUrl.fromLocalFile(file_path)  # Convert the file path to a QUrl
-                media_content = QMediaContent(audio_url)
-                self.player.setMedia(media_content)
-                self.player.play()  # Play the audio file
+                # Set the initial audio for playback
+                self.update_audio_for_playback()
+
         except Exception as e:
             print(f"An error occurred while loading the audio file: {e}")
 
-
-    def toggle_playback(self):
-        if self.player.state() == QMediaPlayer.PlayingState:
-            self.player.pause()  # Pause if it's already playing
-            self.play_button.setText("Play Audio")
-        else:
-            self.player.play()  # Play the audio
-            self.play_button.setText("Pause Audio")
-
-    # Connect sliders to update_spectrogram with each adjustment
     def update_slider_values(self):
         if self.data is None:
             return
@@ -176,8 +167,61 @@ class SignalEqualizerUI(QWidget):
         # Debugging: Print the slider values to verify changes
         print("Slider Values:", self.slider_values)
 
+        # Apply equalization (filtering) based on slider values
+        self.apply_equalization()
+
         # Update spectrogram based on new slider values
         self.spectrogram_widget.update_spectrogram(self.data, self.sample_rate, self.slider_values)
+
+        # Update the audio for playback with the applied equalization
+        self.update_audio_for_playback()
+
+    def apply_equalization(self):
+        # Apply simple gain control to different frequency bands (this is a placeholder for more complex equalization)
+        num_bands = len(self.slider_values)
+        frequency_bands = np.linspace(20, 20000, num_bands)  # Frequency bands (from 20Hz to 20kHz)
+
+        # For each frequency band, apply a gain factor based on the slider value
+        for i, band in enumerate(frequency_bands):
+            gain_factor = self.slider_values[i]
+            # Apply simple gain control for this band (this could be a more complex filtering operation)
+            self.data = self.apply_band_gain(self.data, band, gain_factor)
+
+    def apply_band_gain(self, data, frequency, gain_factor):
+        # Clip the gain factor to avoid overflow
+        MAX_GAIN = 5.0  # Limit gain to 5 times the original signal
+        gain_factor = np.clip(gain_factor, 0, MAX_GAIN)
+
+        # Apply the gain to the signal
+        data = data * gain_factor
+
+        # Clip the values to avoid overflow: For float32 data, we clip to the range [-1, 1]
+        data = np.clip(data, -1.0, 1.0)
+
+        return data
+
+    def update_audio_for_playback(self):
+        # Create a temporary file path for the modified audio
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmpfile:
+            try:
+                # Write the modified audio data to the temporary file
+                sf.write(tmpfile.name, self.data, self.sample_rate)
+                print(f"File written to {tmpfile.name}")
+
+                # Set the QMediaContent for the updated audio
+                audio_url = QUrl.fromLocalFile(tmpfile.name)  # Convert the file path to a QUrl
+                media_content = QMediaContent(audio_url)
+                self.player.setMedia(media_content)
+            except Exception as e:
+                print(f"Error saving audio file: {e}")
+                return
+
+    def play_audio(self):
+        if self.data is not None:
+            # Stop any currently playing audio before starting new playback
+            self.player.stop()
+            # Play the audio (this will play the modified audio with the current slider settings)
+            self.player.play()
 
 
 if __name__ == "__main__":
