@@ -55,11 +55,11 @@ class MainWindow(QMainWindow):
             self.ui.music_slider2: "Guitar",
             self.ui.music_slider3: "Violin",
             self.ui.music_slider4: "Bass Drums",
-            # 9: "Normal ECG",
-            # 10: "Atrial Fibrillation",
-            # 11: "Ventricular Fibrillation",
-            # 12: "Tachycardia",
-        }  # replace numbers with corresponding sliders
+            self.ui.ecg_slider1: "Normal ECG",  # replace numbers with corresponding sliders
+            self.ui.ecg_slider2: "Atrial Fibrillation",  # replace with actual slider
+            self.ui.ecg_slider3: "Ventricular Fibrillation",  # replace with actual slider
+            self.ui.ecg_slider4: "Tachycardia",  # replace with acutal slider
+        }
 
         self.current_mode = Mode.ANIMAL_SOUNDS
         for slider in self.sliders.keys():
