@@ -208,7 +208,10 @@ class MainWindow(QMainWindow):
         self.update_spectrogram()
 
     def update_signal_uniform(self):
-        pass
+        # uniform_sliders_values = get_slider_values(self.sliders)
+        uniform_sliders_values = {}
+        self.signal.equalize_uniform(uniform_sliders_values)
+        self.update_spectrogram()
 
 
 if __name__ == "__main__":

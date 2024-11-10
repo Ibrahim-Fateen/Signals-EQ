@@ -50,6 +50,17 @@ class Signal:
         self.modified_spectrum = self.original_spectrum * gain_array
         self.modified = True
 
+    def equalize_uniform(self, slider_values):
+        """
+        Apply uniform equalization to the signal using a single gain factor.
+
+        Args:
+            slider_values: Dictionary mapping sound names to their slider values (0-2) (0.5 = -6dB, 1 = 0dB, 2 = +6dB)
+        """
+        gain_factor = slider_values["Uniform"]
+        self.modified_spectrum = self.original_spectrum * np.power(gain_factor, np.ones_like(self.frequencies))
+        self.modified = True
+
     def create_smooth_window(self, freq_range, start, end):
         """
         Create a smooth transition window for frequency range boundaries.
