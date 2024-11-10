@@ -139,12 +139,16 @@ class MainWindow(QMainWindow):
         # Show the selected layout
         if index == 0:
             self.show_hide_widget(self.ui.animal_widget, True)
+            self.current_mode = Mode.ANIMAL_SOUNDS
         elif index == 1:
             self.show_hide_widget(self.ui.music_widget, True)
+            self.current_mode = Mode.MUSICAL_INSTRUMENTS
         elif index == 2:
             self.show_hide_widget(self.ui.ECG_widget, True)
+            self.current_mode = Mode.ECG
         elif index == 3:
             self.show_hide_widget(self.ui.uniform_widget, True)
+            self.current_mode = Mode.UNIFORM
 
     def show_hide_widget(self, layout: QWidget, state):
         if layout:
