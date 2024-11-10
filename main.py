@@ -1,18 +1,69 @@
-from PySide6.QtWidgets import QApplication, QMainWindow
-
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage
 import sys
-from main_window import Ui_MainWindow
 from PySide6.QtWidgets import QWidget
 import pyqtgraph as pg
+from enum import Enum
+
+from main_window import Ui_MainWindow
+from Spectrogram import SpectrogramWidget
+from Signal import Signal
+
+
+class Mode(Enum):
+    ANIMAL_SOUNDS = 0
+    MUSICAL_INSTRUMENTS = 1
+    ECG = 2
+    UNIFORM = 3
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.controls_frame.setMinimumHeight(280)
+        self.showMaximized()
         plot_widget = pg.PlotWidget()
         plot_widget.setBackground('#13131F')
         plot_widget.showGrid(x=True, y=True)
+
+        self.frequencies = {
+            # Animals
+            "Dog": [(300, 800), (2000, 4000)],
+            "Cat": [(500, 1000), (2000, 4000)],
+            "Bird": [(1000, 3000), (4000, 8000)],
+            "Lion": [(50, 300)],
+
+            # Musical Instruments
+            "Piano": [(27.5, 1000), (1000, 4186)],
+            "Guitar": [(82, 500), (500, 1200)],
+            "Violin": [(196, 1000), (1000, 4000)],
+            "Bass Drums": [(40, 100), (100, 200)],
+
+            "Normal ECG": [(0.05, 1), (1, 50)],
+            "Atrial Fibrillation": [(0.05, 1), (1, 10), (10, 50)],
+            "Ventricular Fibrillation": [(0.05, 0.5), (0.5, 5), (5, 20)],
+            "Tachycardia": [(0.05, 0.5), (0.5, 5), (5, 20)]
+        }
+
+        self.sliders = {
+            self.ui.animal_slider1: "Dog",
+            self.ui.animal_slider2: "Cat",
+            self.ui.animal_slider3: "Bird",
+            self.ui.animal_slider4: "Lion",
+            self.ui.music_slider1: "Piano",
+            self.ui.music_slider2: "Guitar",
+            self.ui.music_slider3: "Violin",
+            self.ui.music_slider4: "Bass Drums",
+            # 9: "Normal ECG",
+            # 10: "Atrial Fibrillation",
+            # 11: "Ventricular Fibrillation",
+            # 12: "Tachycardia",
+        }  # replace numbers with corresponding sliders
+
+        self.current_mode = Mode.ANIMAL_SOUNDS
+        for slider in self.sliders.keys():
+            slider.valueChanged.connect(self.update_signal)
 
         # Add the plot widget to the layout
         self.ui.graph2_widget.layout().addWidget(plot_widget)
@@ -34,32 +85,34 @@ class MainWindow(QMainWindow):
         plot_data_item2 = pg.PlotDataItem(x, y, pen=pg.mkPen(color='g', width=2))
         plot_widget.addItem(plot_data_item2)
         # Create plot widgets for spectro1 and spectro2
-        spectro1_widget = pg.PlotWidget()
-        spectro2_widget = pg.PlotWidget()
+        # spectro1_widget = pg.PlotWidget()
+        # spectro2_widget = pg.PlotWidget()
 
         # Set the background color
-        spectro1_widget.setBackground('#1e1d23')
-        spectro2_widget.setBackground('#1e1d23')
+        # spectro1_widget.setBackground('#1e1d23')
+        # spectro2_widget.setBackground('#1e1d23')
 
         # Show grid
-        spectro1_widget.showGrid(x=True, y=True)
-        spectro2_widget.showGrid(x=True, y=True)
-        
+        # spectro1_widget.showGrid(x=True, y=True)
+        # spectro2_widget.showGrid(x=True, y=True)
+        self.original_spectrogram = SpectrogramWidget()
+        self.modified_spectrogram = SpectrogramWidget()
 
         # Add the plot widgets to the respective layouts
-        self.ui.spectro1_widget.layout().addWidget(spectro1_widget)
-        self.ui.spectro2_widget.layout().addWidget(spectro2_widget)
+        self.ui.spectro1_widget.layout().addWidget(self.original_spectrogram)
+        self.ui.spectro2_widget.layout().addWidget(self.modified_spectrogram)
 
         # Plot some data for spectro1
-        x3 = [1, 2, 3, 4, 5]
-        y3 = [15, 25, 35, 45, 55]
-        spectro1_widget.plot(x3, y3)
+        # x3 = [1, 2, 3, 4, 5]
+        # y3 = [15, 25, 35, 45, 55]
+        # spectro1_widget.plot(x3, y3)
 
         # Plot some data for spectro2
-        x4 = [1, 2, 3, 4, 5]
-        y4 = [55, 45, 35, 25, 15]
-        spectro2_widget.plot(x4, y4)
-        self.ui.spectrogram_checkbox.stateChanged.connect(lambda state: self.show_hide_layout(self.ui.spectrograph_layout, state))
+        # x4 = [1, 2, 3, 4, 5]
+        # y4 = [55, 45, 35, 25, 15]
+        # spectro2_widget.plot(x4, y4)
+        self.ui.spectrogram_checkbox.stateChanged.connect(
+            lambda state: self.show_hide_layout(self.ui.spectrograph_layout, state))
         self.show_hide_layout(self.ui.spectrograph_layout, False)
 
         # Add layouts to the combo box
@@ -71,6 +124,10 @@ class MainWindow(QMainWindow):
         # Connect combo box selection change to a function
         self.ui.modes_combo.currentIndexChanged.connect(lambda index: self.show_selected_layout(index))
         self.show_selected_layout(0)
+
+        self.ui.browse_btn.clicked.connect(self.load_file)
+
+        self.signal = Signal()
 
     def show_selected_layout(self, index):
         # Hide all layouts
@@ -88,15 +145,14 @@ class MainWindow(QMainWindow):
             self.show_hide_widget(self.ui.ECG_widget, True)
         elif index == 3:
             self.show_hide_widget(self.ui.uniform_widget, True)
-        
 
-    def show_hide_widget(self, layout:QWidget, state):
+    def show_hide_widget(self, layout: QWidget, state):
         if layout:
             if state == 0:
                 layout.hide()
             else:
                 layout.show()
-                
+
     def show_hide_layout(self, layout, state):
         for i in range(layout.count()):
             item = layout.itemAt(i)
@@ -105,10 +161,54 @@ class MainWindow(QMainWindow):
                     item.widget().hide()
                 else:
                     item.widget().show()
-        
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-sys.exit(app.exec_())
 
-#cf66ea
+    def load_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open Audio File", "", "Audio Files (*.wav *.mp3 *.flac)")
+        try:
+            self.signal = Signal.from_file(file_path)
+            self.update_spectrogram()
+        except Exception as e:
+            QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
+
+    def update_spectrogram(self):
+        self.original_spectrogram.plot_spectrogram(self.signal.original_data,
+                                                   self.signal.sample_rate,
+                                                   "Original Signal")
+        self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
+                                                   self.signal.sample_rate,
+                                                   "Modified Signal")
+
+    def update_signal(self):
+        if self.signal.original_data is None:
+            return
+
+        if self.current_mode == Mode.UNIFORM:
+            return self.update_signal_uniform()
+
+        slider_values = {}
+        for slider, sound_name in self.sliders.items():
+            # Convert slider value from 0-100 to 0-2 range (0.5 = -6dB, 1 = 0dB, 2 = +6dB)
+            slider_values[sound_name] = (slider.value() / 50)
+
+        if self.current_mode == Mode.ANIMAL_SOUNDS:
+            relevant_sounds = ["Dog", "Cat", "Bird", "Lion"]
+        elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
+            relevant_sounds = ["Piano", "Guitar", "Violin", "Bass Drums"]
+        elif self.current_mode == Mode.ECG:
+            relevant_sounds = ["Normal ECG", "Atrial Fibrillation", "Ventricular Fibrillation", "Tachycardia"]
+
+        frequency_ranges = {sound: self.frequencies[sound] for sound in relevant_sounds}
+
+        self.signal.equalize(slider_values, frequency_ranges)
+
+        self.update_spectrogram()
+
+    def update_signal_uniform(self):
+        pass
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
