@@ -55,10 +55,20 @@ class MainWindow(QMainWindow):
             self.ui.music_slider2: "Guitar",
             self.ui.music_slider3: "Violin",
             self.ui.music_slider4: "Bass Drums",
-            self.ui.ecg_slider1: "Normal ECG",  # replace numbers with corresponding sliders
-            self.ui.ecg_slider2: "Atrial Fibrillation",  # replace with actual slider
-            self.ui.ecg_slider3: "Ventricular Fibrillation",  # replace with actual slider
-            self.ui.ecg_slider4: "Tachycardia",  # replace with acutal slider
+            # self.ui.ecg_slider1: "Normal ECG",  # replace numbers with corresponding sliders
+            # self.ui.ecg_slider2: "Atrial Fibrillation",  # replace with actual slider
+            # self.ui.ecg_slider3: "Ventricular Fibrillation",  # replace with actual slider
+            # self.ui.ecg_slider4: "Tachycardia",  # replace with acutal slider
+            self.ui.uniform_slider1: "Uniform 1",
+            self.ui.uniform_slider2: "Uniform 2",
+            self.ui.uniform_slider3: "Uniform 3",
+            self.ui.uniform_slider4: "Uniform 4",
+            self.ui.uniform_slider5: "Uniform 5",
+            self.ui.uniform_slider6: "Uniform 6",
+            self.ui.uniform_slider7: "Uniform 7",
+            self.ui.uniform_slider8: "Uniform 8",
+            self.ui.uniform_slider9: "Uniform 9",
+            self.ui.uniform_slider10: "Uniform 10"
         }
 
         self.current_mode = Mode.ANIMAL_SOUNDS
@@ -186,32 +196,38 @@ class MainWindow(QMainWindow):
         if self.signal.original_data is None:
             return
 
+        slider_values = self.get_slider_values()
+
         if self.current_mode == Mode.UNIFORM:
-            return self.update_signal_uniform()
+            self.signal.equalize_uniform(slider_values)
+        else:
+            if self.current_mode == Mode.ANIMAL_SOUNDS:
+                relevant_sounds = ["Dog", "Cat", "Bird", "Lion"]
+            elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
+                relevant_sounds = ["Piano", "Guitar", "Violin", "Bass Drums"]
+            elif self.current_mode == Mode.ECG:
+                relevant_sounds = ["Normal ECG", "Atrial Fibrillation", "Ventricular Fibrillation", "Tachycardia"]
 
-        slider_values = {}
-        for slider, sound_name in self.sliders.items():
-            # Convert slider value from 0-100 to 0-2 range (0.5 = -6dB, 1 = 0dB, 2 = +6dB)
-            slider_values[sound_name] = (slider.value() / 50)
+            frequency_ranges = {sound: self.frequencies[sound] for sound in relevant_sounds}
 
-        if self.current_mode == Mode.ANIMAL_SOUNDS:
-            relevant_sounds = ["Dog", "Cat", "Bird", "Lion"]
+            self.signal.equalize(slider_values, frequency_ranges)
+
+        self.update_spectrogram()
+
+    def get_slider_values(self):
+        relevant_sliders = self.sliders.keys()
+
+        # filter sliders based on mode selected
+        if self.current_mode == Mode.UNIFORM:
+            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("uniform")]
+        elif self.current_mode == Mode.ANIMAL_SOUNDS:
+            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("animal")]
         elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
-            relevant_sounds = ["Piano", "Guitar", "Violin", "Bass Drums"]
+            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("music")]
         elif self.current_mode == Mode.ECG:
-            relevant_sounds = ["Normal ECG", "Atrial Fibrillation", "Ventricular Fibrillation", "Tachycardia"]
+            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ecg")]
 
-        frequency_ranges = {sound: self.frequencies[sound] for sound in relevant_sounds}
-
-        self.signal.equalize(slider_values, frequency_ranges)
-
-        self.update_spectrogram()
-
-    def update_signal_uniform(self):
-        # uniform_sliders_values = get_slider_values(self.sliders)
-        uniform_sliders_values = {}
-        self.signal.equalize_uniform(uniform_sliders_values)
-        self.update_spectrogram()
+        return {sound: slider.value() / 50 for slider, sound in self.sliders.items() if slider in relevant_sliders}
 
 
 if __name__ == "__main__":

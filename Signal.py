@@ -52,13 +52,18 @@ class Signal:
 
     def equalize_uniform(self, slider_values):
         """
-        Apply uniform equalization to the signal using a single gain factor.
+        Apply equalization to the signal based on 10 sliders with uniform frequency ranges.
+        Calls equalize() with appropriate frequency ranges for each slider.
 
         Args:
             slider_values: Dictionary mapping sound names to their slider values (0-2) (0.5 = -6dB, 1 = 0dB, 2 = +6dB)
         """
-        gain_factor = slider_values["Uniform"]
-        self.modified_spectrum = self.original_spectrum * np.power(gain_factor, np.ones_like(self.frequencies))
+        # Define frequency ranges for each slider
+        maximum_frequency = self.get_maximum_frequency()
+        num_sliders = len(slider_values)
+        slider_width = maximum_frequency / num_sliders
+        frequency_ranges = [(i * slider_width, (i + 1) * slider_width) for i in range(num_sliders)]
+        self.equalize(slider_values, {f"Uniform {i + 1}": freq_range for i, freq_range in enumerate(frequency_ranges)})
         self.modified = True
 
     def create_smooth_window(self, freq_range, start, end):
