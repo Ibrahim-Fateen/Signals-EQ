@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
             "Bass Drums": [(40, 100), (100, 200)],
 
             # ECG
-            "Normal": [(0.05, 1), (1, 10)],
+            "Normal": [(1, 10)],
             "Atrial Fibrillation": [(0.05, 0.5), (0.5, 5), (10, 50)],
             "Ventricular Tachycardia": [(20, 100), (0.1, 1)],
             "Ventricular Flutter": [(20, 100), (0.5, 5)]
