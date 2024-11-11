@@ -423,12 +423,12 @@ class Graph(QWidget):
     def x_zoom(self,ratio:float):
         if self.plot_to_track is None:
             return
-        self.custom_viewbox.is_user_panning = True
-        self.custom_viewbox.elapsed_timer.start()
+        # self.custom_viewbox.is_user_panning = True
+        # self.custom_viewbox.elapsed_timer.start()
 
         min_x, max_x, min_y, max_y = self.Calculate_min_max()
         range = max_x - min_x
-        self.panWidth = min(max(self.panWidth + range * ratio, range * 0.1),range )
+        self.panWidth = min(max(self.panWidth + range * ratio, range * 0.05),range)
         self.farthest_plot()
         longest = self.plot_to_track
         end = max(longest.signal.data_pnts[longest.last_point][0] - self.slider,self.panWidth + min_x)

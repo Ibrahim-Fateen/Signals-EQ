@@ -109,6 +109,7 @@ class MainWindow(QMainWindow):
         self.ui.browse_btn.clicked.connect(self.load_file)
 
         self.signal = Signal()
+        self.connect_graph_controls()
 
     def show_selected_layout(self, index):
         # Hide all layouts
@@ -225,33 +226,32 @@ class MainWindow(QMainWindow):
         return {sound: slider.value() / 50 for slider, sound in self.sliders.items() if slider in relevant_sliders}
     def connect_graph_controls(self):
         #zooming and panning for both graphs
-        
+
         self.ui.graph_play_btn.clicked.connect(lambda:{
             self.graph1.play_pause(),
             self.graph2.play_pause()
         })
-        self.ui.graph_speed_slider.valueChanged.connect(lambda value: {
+        self.ui.speed_slider.valueChanged.connect(lambda value: {
             self.graph1.change_speed(value),
             self.graph2.change_speed(value)
         })
         self.ui.zoomin_btn.clicked.connect(lambda: {
-            self.graph1.zoom_in(),
-            self.graph2.zoom_in()
+            self.graph1.x_zoom(-0.1),
+            self.graph2.x_zoom(-0.1)
         })
         self.ui.zoomout_btn.clicked.connect(lambda: {
             self.graph1.x_zoom(0.1),
             self.graph2.x_zoom(0.1)
         })
-        self.ui.reset_btn.clicked.connect(lambda: {
+        self.ui.graph_replay_btn.clicked.connect(lambda: {
             self.graph1.rewind(),
             self.graph2.rewind()
         })
-        self.ui.graph_speed_slider.setValue(30)
-        self.ui.graph_speed_slider.setTickInterval(1)
-        self.ui.graph_speed_slider.setTickPosition(2)
-        self.ui.graph_speed_slider.setSingleStep(1)
-        self.ui.graph_speed_slider.setMinimum(1)
-        self.ui.graph_speed_slider.setMaximum(30)
+        self.ui.speed_slider.setValue(30)
+        self.ui.speed_slider.setRange(1, 30)
+
+
+
 
 
 if __name__ == "__main__":
