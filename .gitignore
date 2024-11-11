@@ -3,3 +3,11 @@ calude_test.py
 test.py
 .idea
 __pycache__/
+mitbih.csv
+csv_generator.py
+Signals/ECGs/Points of interest extractor.py
+Signals/ECGs/201.csv
+Signals/ECGs/205.csv
+Signals/ECGs/207.csv
+Signals/.DS_Store
+.DS_Store
