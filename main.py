@@ -1,13 +1,13 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage
 import sys
 from PySide6.QtWidgets import QWidget
-import pyqtgraph as pg
 from enum import Enum
 from Graph import Graph
 from main_window import Ui_MainWindow
 from Spectrogram import SpectrogramWidget
 from Signal import Signal
 from copy import deepcopy
+
 
 class Mode(Enum):
     ANIMAL_SOUNDS = 0
@@ -40,10 +40,11 @@ class MainWindow(QMainWindow):
             "Violin": [(196, 1000), (1000, 4000)],
             "Bass Drums": [(40, 100), (100, 200)],
 
-            "Normal ECG": [(0.05, 1), (1, 50)],
-            "Atrial Fibrillation": [(0.05, 1), (1, 10), (10, 50)],
-            "Ventricular Fibrillation": [(0.05, 0.5), (0.5, 5), (5, 20)],
-            "Tachycardia": [(0.05, 0.5), (0.5, 5), (5, 20)]
+            # ECG
+            "Normal": [(0.05, 1), (1, 10)],
+            "Atrial Fibrillation": [(0.05, 0.5), (0.5, 5), (10, 50)],
+            "Ventricular Tachycardia": [(20, 100), (0.1, 1)],
+            "Ventricular Flutter": [(20, 100), (0.5, 5)]
         }
 
         self.sliders = {
@@ -55,10 +56,10 @@ class MainWindow(QMainWindow):
             self.ui.music_slider2: "Guitar",
             self.ui.music_slider3: "Violin",
             self.ui.music_slider4: "Bass Drums",
-            self.ui.ECG_slider1: "Normal ECG",
+            self.ui.ECG_slider1: "Normal",
             self.ui.ECG_slider2: "Atrial Fibrillation",
-            self.ui.ECG_slider3: "Ventricular Fibrillation",
-            self.ui.ECG_slider4: "Tachycardia",
+            self.ui.ECG_slider3: "Ventricular Tachycardia",
+            self.ui.ECG_slider4: "Ventricular Flutter",
             self.ui.uniform_slider1: "Uniform 1",
             self.ui.uniform_slider2: "Uniform 2",
             self.ui.uniform_slider3: "Uniform 3",
@@ -161,7 +162,7 @@ class MainWindow(QMainWindow):
             if not file_path.endswith(".csv"):
                 self.signal = Signal.load_signal_from_file(file_path)
             else:
-                self.signal = Signal.load_signal_from_csv_y_only(file_path)
+                self.signal = Signal.load_signal_from_csv(file_path)
 
             self.update_spectrogram()
             self.graph1.plot_signal(self.signal)
@@ -195,7 +196,7 @@ class MainWindow(QMainWindow):
             elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
                 relevant_sounds = ["Piano", "Guitar", "Violin", "Bass Drums"]
             elif self.current_mode == Mode.ECG:
-                relevant_sounds = ["Normal ECG", "Atrial Fibrillation", "Ventricular Fibrillation", "Tachycardia"]
+                relevant_sounds = ["Normal", "Atrial Fibrillation", "Ventricular Tachycardia", "Ventricular Flutter"]
 
             frequency_ranges = {sound: self.frequencies[sound] for sound in relevant_sounds}
 
@@ -208,7 +209,6 @@ class MainWindow(QMainWindow):
         plot.plot.setData([point[0] for point in plot.signal.data_pnts[:plot.last_point]],
                           [point[1] for point in plot.signal.data_pnts[:plot.last_point]])
 
-
     def get_slider_values(self):
         relevant_sliders = self.sliders.keys()
 
@@ -220,7 +220,7 @@ class MainWindow(QMainWindow):
         elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("music")]
         elif self.current_mode == Mode.ECG:
-            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ecg")]
+            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ECG")]
 
         return {sound: slider.value() / 50 for slider, sound in self.sliders.items() if slider in relevant_sliders}
 
