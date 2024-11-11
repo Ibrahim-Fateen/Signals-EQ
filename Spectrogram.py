@@ -17,7 +17,7 @@ class SpectrogramWidget(QWidget):
         self.canvas.figure.patch.set_facecolor('#13131F')
         self.canvas.figure.subplots_adjust(left=0.1, right=1) 
 
-    def plot_spectrogram(self, data, sample_rate, title="Spectrogram"):
+    def plot_spectrogram(self, data, sample_rate, title="Spectrogram", scale='audiogram'):
         try:
             self.ax.clear()
             n_fft = 1024
@@ -25,11 +25,24 @@ class SpectrogramWidget(QWidget):
             S = np.abs(librosa.stft(data, n_fft=n_fft, hop_length=hop_length)) ** 2
             S_db = librosa.power_to_db(S, ref=np.max)
 
-            img = librosa.display.specshow(S_db, sr=sample_rate, hop_length=hop_length,
-                                           x_axis='time', y_axis='log', ax=self.ax, cmap='viridis')
+            if scale == 'audiogram':
+                img = librosa.display.specshow(S_db, sr=sample_rate, hop_length=hop_length,
+                                               x_axis='time', y_axis='log', ax=self.ax, cmap='viridis')
+                self.ax.set_ylim(125, 8_000)
+                y_ticks = [125, 250, 500, 1_000, 2_000, 4_000, 8_000]
+                self.ax.set_yticks(y_ticks)
+                self.ax.set_yticklabels(['125', '250', '500', '1k', '2k', '4k', '8k'])
+
+                for y in y_ticks:
+                    self.ax.axhline(y, color='black', linestyle='--', linewidth=0.5)
+            else:
+                img = librosa.display.specshow(S_db, sr=sample_rate, hop_length=hop_length,
+                                               x_axis='time', y_axis='linear', ax=self.ax, cmap='viridis')
+
             self.ax.set_title(title)
             self.ax.set_xlabel("Time (s)")
             self.ax.set_ylabel("Frequency (Hz)")
+
 
             if self.colorbar is None:
                 self.colorbar = self.canvas.figure.colorbar(img, ax=self.ax, format="%+2.0f dB")

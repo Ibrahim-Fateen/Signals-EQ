@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
             "Bass Drums": [(40, 100), (100, 200)],
 
             # ECG
-            "Normal": [(0.05, 1), (1, 10)],
+            "Normal": [(1, 10)],
             "Atrial Fibrillation": [(0.05, 0.5), (0.5, 5), (10, 50)],
             "Ventricular Tachycardia": [(20, 100), (0.1, 1)],
             "Ventricular Flutter": [(20, 100), (0.5, 5)]
@@ -196,9 +196,15 @@ class MainWindow(QMainWindow):
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
     def update_spectrogram(self):
+        # ___________________________________________________________________________
+        # add a checkbox for audiogram scal
+        scale = 'audiogram' if self.audiogram_checkbox.checked() else 'linear'
+        # error is intentional to force you to add the checkbox MwAHAHAhHAhAHA (evil laugh)
+        # scale = 'audiogram'
+
         self.original_spectrogram.plot_spectrogram(self.signal.original_data,
                                                    self.signal.sample_rate,
-                                                   "Original Signal")
+                                                   "Original Signal", scale)
         self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
                                                    self.signal.sample_rate,
                                                    "Modified Signal")
