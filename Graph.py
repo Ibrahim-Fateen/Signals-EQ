@@ -345,7 +345,7 @@ class Graph(QWidget):
         longest = self.plot_to_track
 
         if self.custom_viewbox.elapsed_timer.elapsed() > 2000 and longest.signal.data_pnts[longest.last_point][0] >= self.plot_widget.viewRange()[0][1]:
-            print("time elapsed",self.custom_viewbox.elapsed_timer.elapsed())
+            # print("time elapsed",self.custom_viewbox.elapsed_timer.elapsed())
             self.custom_viewbox.is_user_panning = False
 
         # print("is linked", self.linked , "is user panning",self.custom_viewbox.is_user_panning)

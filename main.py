@@ -200,14 +200,14 @@ class MainWindow(QMainWindow):
                 self.modified_audio_path = self.save_modified_audio_to_temp()
                 self.modified_audio.set_audio_file(self.modified_audio_path)
             
-            self.original_audio.slider.setDisabled(is_audio)
-            self.original_audio.play_button.setDisabled(is_audio)
-            self.original_audio.replay_button.setDisabled(is_audio)
-            self.original_audio.stop_button.setDisabled(is_audio)
-            self.modified_audio.slider.setDisabled(is_audio)
-            self.modified_audio.play_button.setDisabled(is_audio)
-            self.modified_audio.replay_button.setDisabled(is_audio)
-            self.modified_audio.stop_button.setDisabled(is_audio)
+            self.original_audio.slider.setDisabled(not is_audio)
+            self.original_audio.play_button.setDisabled(not is_audio)
+            self.original_audio.replay_button.setDisabled(not is_audio)
+            self.original_audio.stop_button.setDisabled(not is_audio)
+            self.modified_audio.slider.setDisabled(not is_audio)
+            self.modified_audio.play_button.setDisabled(not is_audio)
+            self.modified_audio.replay_button.setDisabled(not is_audio)
+            self.modified_audio.stop_button.setDisabled(not is_audio)
 
 
         except Exception as e:
@@ -304,7 +304,8 @@ class MainWindow(QMainWindow):
 
         self.ui.graph_play_btn.clicked.connect(lambda:{
             self.graph1.play_pause(),
-            self.graph2.play_pause()
+            self.graph2.play_pause(),
+            self.ui.graph_play_btn.setIcon(QIcon(u"icons/pause.png")) if self.graph1.plot_to_track and self.graph1.plot_to_track.isRunning else self.ui.graph_play_btn.setIcon(QIcon(u"icons/play.png"))
         })
         self.ui.speed_slider.valueChanged.connect(lambda value: {
             self.graph1.change_speed(value),
@@ -320,7 +321,8 @@ class MainWindow(QMainWindow):
         })
         self.ui.graph_replay_btn.clicked.connect(lambda: {
             self.graph1.rewind(),
-            self.graph2.rewind()
+            self.graph2.rewind(),
+            self.ui.graph_play_btn.setIcon(QIcon(u"icons/play.png"))
         })
         self.ui.speed_slider.setValue(10)
         self.ui.speed_slider.setRange(1, 30)
