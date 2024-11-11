@@ -165,11 +165,11 @@ class MainWindow(QMainWindow):
                 self.signal = Signal.load_signal_from_csv(file_path)
 
             self.update_spectrogram()
-            self.graph1.plot_signal(self.signal)
-            self.graph1.change_speed(30)
             non_modified_signal = deepcopy(self.signal)
+            self.graph1.plot_signal(self.signal)
             self.graph2.plot_signal(non_modified_signal)
-            self.graph2.change_speed(30)
+            self.graph1.change_speed(10)
+            self.graph2.change_speed(10)
 
         except Exception as e:
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
@@ -226,6 +226,23 @@ class MainWindow(QMainWindow):
 
     def connect_graph_controls(self):
         #zooming and panning for both graphs
+        self.graph1.custom_viewbox.setXLink(self.graph2.custom_viewbox)
+        self.graph1.custom_viewbox.setYLink(self.graph2.custom_viewbox)
+        def set_user_panning(flag : bool):
+            self.graph1.custom_viewbox.is_user_panning = flag
+            self.graph2.custom_viewbox.is_user_panning = flag
+            self.graph1.custom_viewbox.elapsed_timer.start()
+            self.graph2.custom_viewbox.elapsed_timer.start()
+
+        self.graph1.custom_viewbox.user_panning_action = set_user_panning
+        self.graph2.custom_viewbox.user_panning_action = set_user_panning
+        def update_y_range():
+            min_y = min(self.graph1.min_Y, self.graph2.min_Y)
+            max_y = max(self.graph1.max_Y, self.graph2.max_Y)
+            self.graph1.plot_widget.setYRange(min_y, max_y)
+            self.graph2.plot_widget.setYRange(min_y, max_y)
+        self.graph1.update_y_range = update_y_range
+        self.graph2.update_y_range = update_y_range
 
         self.ui.graph_play_btn.clicked.connect(lambda:{
             self.graph1.play_pause(),
@@ -236,18 +253,18 @@ class MainWindow(QMainWindow):
             self.graph2.change_speed(value)
         })
         self.ui.zoomin_btn.clicked.connect(lambda: {
-            self.graph1.x_zoom(-0.01),
-            self.graph2.x_zoom(-0.01)
+            self.graph1.x_zoom(-0.05),
+            self.graph2.x_zoom(-0.05)
         })
         self.ui.zoomout_btn.clicked.connect(lambda: {
-            self.graph1.x_zoom(0.01),
-            self.graph2.x_zoom(0.01)
+            self.graph1.x_zoom(0.05),
+            self.graph2.x_zoom(0.05)
         })
         self.ui.graph_replay_btn.clicked.connect(lambda: {
             self.graph1.rewind(),
             self.graph2.rewind()
         })
-        self.ui.speed_slider.setValue(30)
+        self.ui.speed_slider.setValue(10)
         self.ui.speed_slider.setRange(1, 30)
 
 

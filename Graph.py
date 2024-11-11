@@ -23,6 +23,7 @@ class CustomViewBox(pg.ViewBox):
         self.selectfirstX = None
         self.selectseoncdX = None
         self.crop = lambda: print("No crop function set")
+        self.user_panning_action = lambda is_user_panning = True: print("No action set")
 
     def mousePressEvent(self, event):
         if event.modifiers() == Qt.ControlModifier and event.button() == Qt.LeftButton:
@@ -37,6 +38,7 @@ class CustomViewBox(pg.ViewBox):
         else:
             self.is_user_panning = True
             self.elapsed_timer.start()
+            self.user_panning_action(True)
             super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
@@ -44,11 +46,13 @@ class CustomViewBox(pg.ViewBox):
             self.roi_end_pos = self.mapToView(event.pos())
         self.is_user_panning = False
         self.elapsed_timer.start()
+        self.user_panning_action(False)
         super().mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
         self.is_user_panning = True
         self.elapsed_timer.start()
+        self.user_panning_action(True)
         if self.roi is not None:
             pos = self.mapToView(event.pos())
             self.roi.setSize([pos.x() - self.roi.pos()[0], pos.y() - self.roi.pos()[1]])
@@ -58,6 +62,7 @@ class CustomViewBox(pg.ViewBox):
     def wheelEvent(self, event, *args, **kwargs):
         self.is_user_panning = True
         self.elapsed_timer.start()
+        self.user_panning_action(True)
         super().wheelEvent(event, *args, **kwargs)
 
     def keyPressEvent(self, event):
@@ -72,8 +77,7 @@ class CustomViewBox(pg.ViewBox):
                 self.removeItem(self.roi)
                 self.roi = None
                 self.crop()
-                # print(f"Selected X range: {bottom_left} to {bottom_right}")
-                # print(f"Selected X range: {bottom_left} to {bottom_right}")
+
 
 
         super().keyPressEvent(event)
@@ -130,6 +134,9 @@ class Graph(QWidget):
         self.counter = 0
         self.slider = 0
         self.speed = 1
+        self.update_y_range = lambda : print("No action set")
+        self.min_Y = -1
+        self.max_Y = 1
 
 
     def change_speed(self,speed:int):
@@ -336,13 +343,12 @@ class Graph(QWidget):
         )
         self.farthest_plot()
         longest = self.plot_to_track
-        # print("label",longest.signal.label)
-        # print("last point",longest.last_point,"len",len(longest.signal.data_pnts))
-        if self.custom_viewbox.elapsed_timer.elapsed() + self.time_offset > 2000 and longest.signal.data_pnts[longest.last_point][0] >= self.plot_widget.viewRange()[0][1]:
-            self.time_offset = 0
+
+        if self.custom_viewbox.elapsed_timer.elapsed() > 2000 and longest.signal.data_pnts[longest.last_point][0] >= self.plot_widget.viewRange()[0][1]:
+            print("time elapsed",self.custom_viewbox.elapsed_timer.elapsed())
             self.custom_viewbox.is_user_panning = False
 
-        # print("is linked", self.linked , "is user panning",self.custom_viewbox.is_user_panning)
+        print("is linked", self.linked , "is user panning",self.custom_viewbox.is_user_panning)
         if not self.custom_viewbox.is_user_panning and longest.isRunning:
             self.plot_widget.setXRange(start, end, padding=0)
             visible_y_values = [
@@ -353,7 +359,15 @@ class Graph(QWidget):
             if visible_y_values:
                 min_y = min(visible_y_values)
                 max_y = max(visible_y_values)
-            self.plot_widget.setYRange(min_y, max_y, padding=0)
+                margin_y = abs(max_y - min_y) * 0.1
+                min_y -= margin_y
+                max_y += margin_y
+                self.min_Y = min_y
+                self.max_Y = max_y
+            # self.plot_widget.setYRange(min_y, max_y, padding=0)
+            self.update_y_range()
+            
+            
   
     def get_last_point(self):
         if self.plot_to_track:
