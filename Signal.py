@@ -129,11 +129,13 @@ class Signal(DynamicSignal):
         try:
             signal = Signal()
             df = pd.read_csv(file_path)
-            if df.shape[1] != 2:
+            if df.shape[1] == 1:
+                return Signal.load_signal_from_csv_y_only(file_path)
+            elif df.shape[1] != 2:
                 raise ValueError("CSV file must have exactly two columns: time and amplitude.")
             time = df.iloc[:, 0].values
             data = df.iloc[:, 1].values
-            sample_rate = 1 / np.mean(np.diff(time))
+            sample_rate = 1 / np.mean(np.diff(time)) * 1000
             signal.sample_rate = sample_rate
             signal.original_data = data
             signal.plotting_timespace = time
