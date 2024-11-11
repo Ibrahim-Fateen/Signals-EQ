@@ -100,10 +100,34 @@ class Signal(DynamicSignal):
             self.modified_data_pnts = [(i, y) for i, y in enumerate(self.modified_data)]
             self.modified = False
         return self.modified_data
-            
 
     def get_maximum_frequency(self):
-        return np.max(self.frequencies)
+        """
+        Gets the maximum significant frequency present in the signal.
+        Uses the magnitude spectrum to determine where the signal content becomes negligible.
+
+        Returns:
+            float: The maximum significant frequency in Hz
+        """
+        # Get the magnitude spectrum (absolute values)
+        magnitude_spectrum = np.abs(self.original_spectrum)
+
+        noise_threshold = 0.05  # 5% of maximum magnitude
+        noise_floor = np.max(magnitude_spectrum) * noise_threshold
+
+        positive_freqs = self.frequencies[:len(self.frequencies) // 2]
+        positive_magnitudes = magnitude_spectrum[:len(self.frequencies) // 2]
+
+        significant_freq_indices = np.where(positive_magnitudes > noise_floor)[0]
+
+        if len(significant_freq_indices) == 0:
+            return self.sampling_rate / 2  # Return Nyquist frequency if no significant frequencies found
+
+        max_significant_freq = positive_freqs[significant_freq_indices[-1]]
+
+        # max_significant_freq = np.ceil(max_significant_freq / 1000) * 1000
+
+        return max_significant_freq
 
     @staticmethod
     def load_signal_from_file(file_path):
@@ -125,6 +149,8 @@ class Signal(DynamicSignal):
             return signal
         except Exception as e:
             print(f"An error occurred while reading the file: {e}")
+
+    @staticmethod
     def load_signal_from_csv(file_path):
         try:
             signal = Signal()
@@ -151,6 +177,8 @@ class Signal(DynamicSignal):
             return signal
         except Exception as e:
             print(f"An error occurred while reading the CSV file: {e}")
+
+    @staticmethod
     def load_signal_from_csv_y_only(file_path, sample_rate=100):
         try:
             signal = Signal()
@@ -179,6 +207,7 @@ class Signal(DynamicSignal):
             return signal
         except Exception as e:
             print(f"An error occurred while reading the CSV file: {e}")
+
     def convert_to_data_pnts(self):
         data_pnts = [(i, y) for i, y in enumerate(self.original_data)]
         return data_pnts
