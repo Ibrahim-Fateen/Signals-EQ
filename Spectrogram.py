@@ -28,9 +28,13 @@ class SpectrogramWidget(QWidget):
             if scale == 'audiogram':
                 img = librosa.display.specshow(S_db, sr=sample_rate, hop_length=hop_length,
                                                x_axis='time', y_axis='log', ax=self.ax, cmap='viridis')
-                self.ax.set_ylim(0, 10_000)
-                self.ax.set_yticks([125, 250, 500, 1_000, 2_000, 4_000, 8_000])
+                self.ax.set_ylim(125, 8_000)
+                y_ticks = [125, 250, 500, 1_000, 2_000, 4_000, 8_000]
+                self.ax.set_yticks(y_ticks)
                 self.ax.set_yticklabels(['125', '250', '500', '1k', '2k', '4k', '8k'])
+
+                for y in y_ticks:
+                    self.ax.axhline(y, color='black', linestyle='--', linewidth=0.5)
             else:
                 img = librosa.display.specshow(S_db, sr=sample_rate, hop_length=hop_length,
                                                x_axis='time', y_axis='linear', ax=self.ax, cmap='viridis')

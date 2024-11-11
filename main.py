@@ -178,6 +178,8 @@ class MainWindow(QMainWindow):
         # ___________________________________________________________________________
         # add a checkbox for audiogram scal
         scale = 'audiogram' if self.audiogram_checkbox.checked() else 'linear'
+        # error is intentional to force you to add the checkbox MwAHAHAhHAhAHA (evil laugh)
+        # scale = 'audiogram'
 
         self.original_spectrogram.plot_spectrogram(self.signal.original_data,
                                                    self.signal.sample_rate,
