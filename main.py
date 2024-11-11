@@ -128,11 +128,10 @@ class MainWindow(QMainWindow):
         modified_stop_btn.setIcon(stop_icon)
         self.ui.horizontalLayout_2.addWidget(modified_stop_btn)
         self.modified_audio = AudioPlayer(self.ui.audio2_play_btn, self.ui.audio2_slider, self.ui.audio2_replay_btn, self.ui.audio2_time_label, modified_stop_btn)
-        self.log_scale_checkbox = QCheckBox("Log Scale")
+        self.log_scale_checkbox = QCheckBox("Use Audiogram Scale")
         self.log_scale_checkbox.setMaximumWidth(100)
         self.ui.verticalLayout_20.addWidget(self.log_scale_checkbox)
-
-
+        self.log_scale_checkbox.stateChanged.connect(lambda state: self.update_spectrogram())
 
     def show_selected_layout(self, index):
         # Hide all layouts
@@ -209,30 +208,27 @@ class MainWindow(QMainWindow):
             self.modified_audio.replay_button.setDisabled(not is_audio)
             self.modified_audio.stop_button.setDisabled(not is_audio)
 
-
         except Exception as e:
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
     def update_spectrogram(self):
         # ___________________________________________________________________________
-        # add a checkbox for audiogram scal
-        # scale = 'audiogram' if self.audiogram_checkbox.checked() else 'linear'
-        # error is intentional to force you to add the checkbox MwAHAHAhHAhAHA (evil laugh)
-        # scale = 'audiogram'
+        # add a checkbox for audiogram scale
+        scale = 'audiogram' if self.log_scale_checkbox.isChecked() else 'linear'
 
         self.original_spectrogram.plot_spectrogram(self.signal.original_data,
                                                    self.signal.sample_rate,
-                                                   "Original Signal")
+                                                   "Original Signal", scale)
         self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
                                                    self.signal.sample_rate,
-                                                   "Modified Signal")
+                                                   "Modified Signal", scale)
+
     def save_modified_audio_to_temp(self):
         temp_dir = tempfile.gettempdir()
         temp_file_path = os.path.join(temp_dir, "modified_audio.wav")
         write(temp_file_path, self.signal.sample_rate, self.signal.get_modified_data())
         return temp_file_path
-    
-    
+
     def update_modified_audio(self):
         write(self.modified_audio_path, self.signal.sample_rate, self.signal.get_modified_data())
         self.modified_audio.remove_audio_file()
@@ -326,9 +322,6 @@ class MainWindow(QMainWindow):
         })
         self.ui.speed_slider.setValue(10)
         self.ui.speed_slider.setRange(1, 30)
-
-
-
 
 
 if __name__ == "__main__":
