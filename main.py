@@ -129,7 +129,7 @@ class MainWindow(QMainWindow):
         self.ui.horizontalLayout_2.addWidget(modified_stop_btn)
         self.modified_audio = AudioPlayer(self.ui.audio2_play_btn, self.ui.audio2_slider, self.ui.audio2_replay_btn, self.ui.audio2_time_label, modified_stop_btn)
         self.log_scale_checkbox = QCheckBox("Use Audiogram Scale")
-        self.log_scale_checkbox.setMaximumWidth(100)
+        self.log_scale_checkbox.setMaximumWidth(200)
         self.ui.verticalLayout_20.addWidget(self.log_scale_checkbox)
         self.log_scale_checkbox.stateChanged.connect(lambda state: self.update_spectrogram())
 
@@ -212,8 +212,6 @@ class MainWindow(QMainWindow):
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
     def update_spectrogram(self):
-        # ___________________________________________________________________________
-        # add a checkbox for audiogram scale
         scale = 'audiogram' if self.log_scale_checkbox.isChecked() else 'linear'
 
         self.original_spectrogram.plot_spectrogram(self.signal.original_data,
