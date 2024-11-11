@@ -428,7 +428,7 @@ class Graph(QWidget):
 
         min_x, max_x, min_y, max_y = self.Calculate_min_max()
         range = max_x - min_x
-        self.panWidth = min(max(self.panWidth + range * ratio, range * 0.05),range)
+        self.panWidth = min(max(self.panWidth + range * ratio, range * 0.01),range)
         self.farthest_plot()
         longest = self.plot_to_track
         end = max(longest.signal.data_pnts[longest.last_point][0] - self.slider,self.panWidth + min_x)

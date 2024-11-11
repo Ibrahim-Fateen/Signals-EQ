@@ -236,12 +236,12 @@ class MainWindow(QMainWindow):
             self.graph2.change_speed(value)
         })
         self.ui.zoomin_btn.clicked.connect(lambda: {
-            self.graph1.x_zoom(-0.1),
-            self.graph2.x_zoom(-0.1)
+            self.graph1.x_zoom(-0.01),
+            self.graph2.x_zoom(-0.01)
         })
         self.ui.zoomout_btn.clicked.connect(lambda: {
-            self.graph1.x_zoom(0.1),
-            self.graph2.x_zoom(0.1)
+            self.graph1.x_zoom(0.01),
+            self.graph2.x_zoom(0.01)
         })
         self.ui.graph_replay_btn.clicked.connect(lambda: {
             self.graph1.rewind(),
