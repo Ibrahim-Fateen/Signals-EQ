@@ -1,6 +1,7 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage , QPushButton, QWidget 
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage , QPushButton, QWidget  
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QCheckBox
 import sys
 from PySide6.QtWidgets import QWidget
 from enum import Enum
@@ -127,6 +128,10 @@ class MainWindow(QMainWindow):
         modified_stop_btn.setIcon(stop_icon)
         self.ui.horizontalLayout_2.addWidget(modified_stop_btn)
         self.modified_audio = AudioPlayer(self.ui.audio2_play_btn, self.ui.audio2_slider, self.ui.audio2_replay_btn, self.ui.audio2_time_label, modified_stop_btn)
+        self.log_scale_checkbox = QCheckBox("Log Scale")
+        self.log_scale_checkbox.setMaximumWidth(100)
+        self.ui.verticalLayout_20.addWidget(self.log_scale_checkbox)
+
 
 
     def show_selected_layout(self, index):
@@ -189,9 +194,22 @@ class MainWindow(QMainWindow):
             self.graph2.plot_signal(non_modified_signal)
             self.graph1.change_speed(10)
             self.graph2.change_speed(10)
-            self.original_audio.set_audio_file(file_path)
-            self.modified_audio_path = self.save_modified_audio_to_temp()
-            self.modified_audio.set_audio_file(self.modified_audio_path)
+            is_audio = not file_path.endswith(".csv")
+            if is_audio:
+                self.original_audio.set_audio_file(file_path)
+                self.modified_audio_path = self.save_modified_audio_to_temp()
+                self.modified_audio.set_audio_file(self.modified_audio_path)
+            
+            self.original_audio.slider.setDisabled(is_audio)
+            self.original_audio.play_button.setDisabled(is_audio)
+            self.original_audio.replay_button.setDisabled(is_audio)
+            self.original_audio.stop_button.setDisabled(is_audio)
+            self.modified_audio.slider.setDisabled(is_audio)
+            self.modified_audio.play_button.setDisabled(is_audio)
+            self.modified_audio.replay_button.setDisabled(is_audio)
+            self.modified_audio.stop_button.setDisabled(is_audio)
+
+
         except Exception as e:
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
@@ -241,7 +259,8 @@ class MainWindow(QMainWindow):
             self.signal.equalize(slider_values, frequency_ranges)
 
         self.update_spectrogram()
-        self.update_modified_audio()
+        if self.modified_audio_path:
+            self.update_modified_audio()
         
         plot = self.graph1.plot_to_track
         plot.signal.data_pnts = self.signal.modified_data_pnts
