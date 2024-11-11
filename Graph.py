@@ -348,7 +348,7 @@ class Graph(QWidget):
             print("time elapsed",self.custom_viewbox.elapsed_timer.elapsed())
             self.custom_viewbox.is_user_panning = False
 
-        print("is linked", self.linked , "is user panning",self.custom_viewbox.is_user_panning)
+        # print("is linked", self.linked , "is user panning",self.custom_viewbox.is_user_panning)
         if not self.custom_viewbox.is_user_panning and longest.isRunning:
             self.plot_widget.setXRange(start, end, padding=0)
             visible_y_values = [

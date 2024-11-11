@@ -175,12 +175,16 @@ class MainWindow(QMainWindow):
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
     def update_spectrogram(self):
+        # ___________________________________________________________________________
+        # add a checkbox for audiogram scal
+        scale = 'audiogram' if self.audiogram_checkbox.checked() else 'linear'
+
         self.original_spectrogram.plot_spectrogram(self.signal.original_data,
                                                    self.signal.sample_rate,
-                                                   "Original Signal")
+                                                   "Original Signal", scale)
         self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
                                                    self.signal.sample_rate,
-                                                   "Modified Signal")
+                                                   "Modified Signal", scale)
 
     def update_signal(self):
         if self.signal.original_data is None:
