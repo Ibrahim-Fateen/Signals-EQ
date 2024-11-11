@@ -13,7 +13,7 @@ class Signal(DynamicSignal):
         self.original_spectrum = None
         self.frequencies = None
         self.modified_spectrum = None
-        # self.modified_data = None
+        self.modified_data = None
         self.modified = False
         self.modified_data_pnts = None
 
@@ -120,7 +120,7 @@ class Signal(DynamicSignal):
             signal.data_pnts = signal.convert_to_data_pnts()
             signal.modified_data_pnts = signal.data_pnts.copy()
             signal.label = file_path.split("/")[-1]
-            signal.color = "red"
+            signal.color = "blue"
             signal.ID = file_path
             return signal
         except Exception as e:
@@ -144,7 +144,7 @@ class Signal(DynamicSignal):
             signal.data_pnts = signal.convert_to_data_pnts()
             signal.modified_data_pnts = signal.data_pnts.copy()
             signal.label = file_path.split("/")[-1]
-            signal.color = "red"
+            signal.color = "blue"
             signal.ID = file_path
             return signal
         except Exception as e:
@@ -172,7 +172,7 @@ class Signal(DynamicSignal):
             signal.data_pnts = signal.convert_to_data_pnts()
             signal.modified_data_pnts = signal.data_pnts.copy()
             signal.label = file_path.split("/")[-1]
-            signal.color = "red"
+            signal.color = "blue"
             signal.ID = file_path
             return signal
         except Exception as e:

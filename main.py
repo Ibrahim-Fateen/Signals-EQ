@@ -81,7 +81,6 @@ class MainWindow(QMainWindow):
         self.ui.graph2_widget.layout().addWidget(self.graph1)
         self.ui.graph1_widget.layout().addWidget(self.graph2)
 
-
         self.original_spectrogram = SpectrogramWidget()
         self.modified_spectrogram = SpectrogramWidget()
 
@@ -90,7 +89,6 @@ class MainWindow(QMainWindow):
         self.ui.spectro2_widget.layout().addWidget(self.modified_spectrogram)
         self.ui.spectro1_widget.layout().setContentsMargins(0, 0, 0, 0)
         self.ui.spectro2_widget.layout().setContentsMargins(0, 0, 0, 0)
-
 
         self.ui.spectrogram_checkbox.stateChanged.connect(
             lambda state: self.show_hide_layout(self.ui.spectrograph_layout, state))
@@ -148,7 +146,7 @@ class MainWindow(QMainWindow):
                     item.widget().show()
 
     def load_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open Audio File", "", "Audio Files (*.wav *.mp3 *.flac *.csv)")
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open Signal File", "", "Audio Files (*.wav *.mp3 *.flac *.csv)")
         #clear the previous signal
         self.signal = Signal()
         self.graph1.plots = []
@@ -201,13 +199,14 @@ class MainWindow(QMainWindow):
             frequency_ranges = {sound: self.frequencies[sound] for sound in relevant_sounds}
 
             self.signal.equalize(slider_values, frequency_ranges)
-            plot = self.graph1.plot_to_track
-            plot.signal.data_pnts = self.signal.modified_data_pnts
-            plot.plot.setData([point[0] for point in plot.signal.data_pnts[:plot.last_point]], 
-                              [point[1] for point in plot.signal.data_pnts[:plot.last_point]])
-            
 
         self.update_spectrogram()
+
+        plot = self.graph1.plot_to_track
+        plot.signal.data_pnts = self.signal.modified_data_pnts
+        plot.plot.setData([point[0] for point in plot.signal.data_pnts[:plot.last_point]],
+                          [point[1] for point in plot.signal.data_pnts[:plot.last_point]])
+
 
     def get_slider_values(self):
         relevant_sliders = self.sliders.keys()
@@ -223,6 +222,7 @@ class MainWindow(QMainWindow):
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ecg")]
 
         return {sound: slider.value() / 50 for slider, sound in self.sliders.items() if slider in relevant_sliders}
+
     def connect_graph_controls(self):
         #zooming and panning for both graphs
         
