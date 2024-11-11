@@ -198,13 +198,13 @@ class MainWindow(QMainWindow):
     def update_spectrogram(self):
         # ___________________________________________________________________________
         # add a checkbox for audiogram scal
-        scale = 'audiogram' if self.audiogram_checkbox.checked() else 'linear'
+        # scale = 'audiogram' if self.audiogram_checkbox.checked() else 'linear'
         # error is intentional to force you to add the checkbox MwAHAHAhHAhAHA (evil laugh)
         # scale = 'audiogram'
 
         self.original_spectrogram.plot_spectrogram(self.signal.original_data,
                                                    self.signal.sample_rate,
-                                                   "Original Signal", scale)
+                                                   "Original Signal")
         self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
                                                    self.signal.sample_rate,
                                                    "Modified Signal")
