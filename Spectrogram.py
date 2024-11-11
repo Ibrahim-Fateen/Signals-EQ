@@ -8,12 +8,14 @@ from matplotlib.figure import Figure
 class SpectrogramWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.canvas = FigureCanvas(Figure(figsize=(5, 3)))
+        self.canvas = FigureCanvas(Figure(figsize=(1, 0.5)))
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
         self.setLayout(layout)
         self.ax = self.canvas.figure.subplots()
         self.colorbar = None
+        self.canvas.figure.patch.set_facecolor('#13131F')
+        self.canvas.figure.subplots_adjust(left=0.1, right=1) 
 
     def plot_spectrogram(self, data, sample_rate, title="Spectrogram"):
         try:
@@ -33,6 +35,17 @@ class SpectrogramWidget(QWidget):
                 self.colorbar = self.canvas.figure.colorbar(img, ax=self.ax, format="%+2.0f dB")
             else:
                 self.colorbar.update_normal(img)
+
+            # Set the color of the numbers to green
+            self.colorbar.ax.yaxis.set_tick_params(color='#04b97f')
+            self.colorbar.ax.yaxis.set_ticklabels(self.colorbar.ax.yaxis.get_ticklabels(), color='#04b97f')
+
+            # Set the color of the axes to green
+            self.ax.tick_params(axis='x', colors='#04b97f')
+            self.ax.tick_params(axis='y', colors='#04b97f')
+            self.ax.xaxis.label.set_color('#04b97f')
+            self.ax.yaxis.label.set_color('#04b97f')
+            self.ax.title.set_color('#04b97f')
 
             self.canvas.draw()
         except Exception as e:

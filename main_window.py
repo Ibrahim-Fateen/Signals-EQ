@@ -554,14 +554,15 @@ class Ui_MainWindow(object):
         self.spectrograph_layout.setObjectName(u"spectrograph_layout")
         self.spectro1_widget = QWidget(self.graphs_widget)
         self.spectro1_widget.setObjectName(u"spectro1_widget")
+        self.spectro1_widget.setMinimumHeight(230)
         self.verticalLayout_30 = QVBoxLayout(self.spectro1_widget)
         self.verticalLayout_30.setSpacing(0)
         self.verticalLayout_30.setObjectName(u"verticalLayout_30")
         self.verticalLayout_30.setContentsMargins(0, 0, 0, 0)
-        self.original_spectro_label = QLabel(self.spectro1_widget)
+        self.original_spectro_label = QLabel()
         self.original_spectro_label.setObjectName(u"original_spectro_label")
 
-        self.verticalLayout_30.addWidget(self.original_spectro_label)
+        # self.verticalLayout_30.addWidget(self.original_spectro_label)
 
 
         self.spectrograph_layout.addWidget(self.spectro1_widget)
@@ -572,10 +573,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_31.setSpacing(0)
         self.verticalLayout_31.setObjectName(u"verticalLayout_31")
         self.verticalLayout_31.setContentsMargins(0, 0, 0, 0)
-        self.equalized_spectro_label = QLabel(self.spectro2_widget)
+        self.equalized_spectro_label = QLabel()
         self.equalized_spectro_label.setObjectName(u"equalized_spectro_label")
 
-        self.verticalLayout_31.addWidget(self.equalized_spectro_label)
+        # self.verticalLayout_31.addWidget(self.equalized_spectro_label)
 
 
         self.spectrograph_layout.addWidget(self.spectro2_widget)

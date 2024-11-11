@@ -1,18 +1,21 @@
 import numpy as np
 import librosa
 from scipy.fft import fft, fftfreq, ifft
+from DynamicSignal import DynamicSignal
+import pandas as pd
 
-
-class Signal:
-    def __init__(self):
+class Signal(DynamicSignal):
+    def __init__(self, data_pnts=None, label=None, color=None, is_normalized=False):
+        super().__init__(data_pnts, label, color, is_normalized)
         self.sample_rate = None
         self.original_data = None
         self.plotting_timespace = None
         self.original_spectrum = None
         self.frequencies = None
         self.modified_spectrum = None
-        self.modified_data = None
+        # self.modified_data = None
         self.modified = False
+        self.modified_data_pnts = None
 
     def equalize(self, slider_values, frequency_ranges_dict):
         """
@@ -49,6 +52,7 @@ class Signal:
         # Apply the combined gain to the spectrum
         self.modified_spectrum = self.original_spectrum * gain_array
         self.modified = True
+        # self.get_modified_data()
 
     def equalize_uniform(self, slider_values):
         """
@@ -93,14 +97,16 @@ class Signal:
     def get_modified_data(self):
         if self.modified:
             self.modified_data = ifft(self.modified_spectrum).real
+            self.modified_data_pnts = [(i, y) for i, y in enumerate(self.modified_data)]
             self.modified = False
         return self.modified_data
+            
 
     def get_maximum_frequency(self):
         return np.max(self.frequencies)
 
     @staticmethod
-    def from_file(file_path):
+    def load_signal_from_file(file_path):
         try:
             signal = Signal()
             data, sample_rate = librosa.load(file_path)
@@ -111,6 +117,66 @@ class Signal:
             signal.frequencies = fftfreq(len(data), 1 / sample_rate)
             signal.modified_spectrum = signal.original_spectrum.copy()
             signal.modified_data = data
+            signal.data_pnts = signal.convert_to_data_pnts()
+            signal.modified_data_pnts = signal.data_pnts.copy()
+            signal.label = file_path.split("/")[-1]
+            signal.color = "red"
+            signal.ID = file_path
             return signal
         except Exception as e:
             print(f"An error occurred while reading the file: {e}")
+    def load_signal_from_csv(file_path):
+        try:
+            signal = Signal()
+            df = pd.read_csv(file_path)
+            if df.shape[1] != 2:
+                raise ValueError("CSV file must have exactly two columns: time and amplitude.")
+            time = df.iloc[:, 0].values
+            data = df.iloc[:, 1].values
+            sample_rate = 1 / np.mean(np.diff(time))
+            signal.sample_rate = sample_rate
+            signal.original_data = data
+            signal.plotting_timespace = time
+            signal.original_spectrum = fft(data)
+            signal.frequencies = fftfreq(len(data), 1 / sample_rate)
+            signal.modified_spectrum = signal.original_spectrum.copy()
+            signal.modified_data = data
+            signal.data_pnts = signal.convert_to_data_pnts()
+            signal.modified_data_pnts = signal.data_pnts.copy()
+            signal.label = file_path.split("/")[-1]
+            signal.color = "red"
+            signal.ID = file_path
+            return signal
+        except Exception as e:
+            print(f"An error occurred while reading the CSV file: {e}")
+    def load_signal_from_csv_y_only(file_path, sample_rate=100):
+        try:
+            signal = Signal()
+            df = pd.read_csv(file_path)
+            if df.shape[1] != 1:
+                raise ValueError("CSV file must have exactly one column: amplitude.")
+            data = df.iloc[:, 0].values.astype(float)
+            
+            # Normalize data to be between -10 and 10
+            data_min = np.min(data)
+            data_max = np.max(data)
+            data = 2 * (data - data_min) / (data_max - data_min) - 1
+            
+            signal.sample_rate = sample_rate
+            signal.original_data = data
+            signal.plotting_timespace = np.arange(len(data)) / sample_rate
+            signal.original_spectrum = fft(data)
+            signal.frequencies = fftfreq(len(data), 1 / sample_rate)
+            signal.modified_spectrum = signal.original_spectrum.copy()
+            signal.modified_data = data
+            signal.data_pnts = signal.convert_to_data_pnts()
+            signal.modified_data_pnts = signal.data_pnts.copy()
+            signal.label = file_path.split("/")[-1]
+            signal.color = "red"
+            signal.ID = file_path
+            return signal
+        except Exception as e:
+            print(f"An error occurred while reading the CSV file: {e}")
+    def convert_to_data_pnts(self):
+        data_pnts = [(i, y) for i, y in enumerate(self.original_data)]
+        return data_pnts

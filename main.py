@@ -3,11 +3,11 @@ import sys
 from PySide6.QtWidgets import QWidget
 import pyqtgraph as pg
 from enum import Enum
-
+from Graph import Graph
 from main_window import Ui_MainWindow
 from Spectrogram import SpectrogramWidget
 from Signal import Signal
-
+from copy import deepcopy
 
 class Mode(Enum):
     ANIMAL_SOUNDS = 0
@@ -23,9 +23,9 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.ui.controls_frame.setMinimumHeight(280)
         self.showMaximized()
-        plot_widget = pg.PlotWidget()
-        plot_widget.setBackground('#13131F')
-        plot_widget.showGrid(x=True, y=True)
+
+        self.graph1 = Graph()
+        self.graph2 = Graph()
 
         self.frequencies = {
             # Animals
@@ -55,10 +55,10 @@ class MainWindow(QMainWindow):
             self.ui.music_slider2: "Guitar",
             self.ui.music_slider3: "Violin",
             self.ui.music_slider4: "Bass Drums",
-            # self.ui.ecg_slider1: "Normal ECG",  # replace numbers with corresponding sliders
-            # self.ui.ecg_slider2: "Atrial Fibrillation",  # replace with actual slider
-            # self.ui.ecg_slider3: "Ventricular Fibrillation",  # replace with actual slider
-            # self.ui.ecg_slider4: "Tachycardia",  # replace with acutal slider
+            self.ui.ECG_slider1: "Normal ECG",
+            self.ui.ECG_slider2: "Atrial Fibrillation",
+            self.ui.ECG_slider3: "Ventricular Fibrillation",
+            self.ui.ECG_slider4: "Tachycardia",
             self.ui.uniform_slider1: "Uniform 1",
             self.ui.uniform_slider2: "Uniform 2",
             self.ui.uniform_slider3: "Uniform 3",
@@ -71,56 +71,27 @@ class MainWindow(QMainWindow):
             self.ui.uniform_slider10: "Uniform 10"
         }
 
+        for slider in self.sliders.keys():
+            slider.setValue(slider.maximum() // 2)
         self.current_mode = Mode.ANIMAL_SOUNDS
         for slider in self.sliders.keys():
-            slider.valueChanged.connect(self.update_signal)
+            slider.sliderReleased.connect(self.update_signal)
 
         # Add the plot widget to the layout
-        self.ui.graph2_widget.layout().addWidget(plot_widget)
-        # Create another plot widget
-        plot_widget2 = pg.PlotWidget()
-        plot_widget2.setBackground('#13131F')
-        plot_widget2.showGrid(x=True, y=True)
-        # Add the second plot widget to the layout
-        self.ui.graph1_widget.layout().addWidget(plot_widget2)
+        self.ui.graph2_widget.layout().addWidget(self.graph1)
+        self.ui.graph1_widget.layout().addWidget(self.graph2)
 
-        # Plot some other data
-        x2 = [1, 2, 3, 4, 5]
-        y2 = [50, 40, 30, 20, 10]
-        plot_data_item = pg.PlotDataItem(x2, y2, pen=pg.mkPen(color='r', width=2))
-        plot_widget2.addItem(plot_data_item)
-        # Plot some data
-        x = [1, 2, 3, 4, 5]
-        y = [10, 20, 30, 40, 50]
-        plot_data_item2 = pg.PlotDataItem(x, y, pen=pg.mkPen(color='g', width=2))
-        plot_widget.addItem(plot_data_item2)
-        # Create plot widgets for spectro1 and spectro2
-        # spectro1_widget = pg.PlotWidget()
-        # spectro2_widget = pg.PlotWidget()
 
-        # Set the background color
-        # spectro1_widget.setBackground('#1e1d23')
-        # spectro2_widget.setBackground('#1e1d23')
-
-        # Show grid
-        # spectro1_widget.showGrid(x=True, y=True)
-        # spectro2_widget.showGrid(x=True, y=True)
         self.original_spectrogram = SpectrogramWidget()
         self.modified_spectrogram = SpectrogramWidget()
 
         # Add the plot widgets to the respective layouts
         self.ui.spectro1_widget.layout().addWidget(self.original_spectrogram)
         self.ui.spectro2_widget.layout().addWidget(self.modified_spectrogram)
+        self.ui.spectro1_widget.layout().setContentsMargins(0, 0, 0, 0)
+        self.ui.spectro2_widget.layout().setContentsMargins(0, 0, 0, 0)
 
-        # Plot some data for spectro1
-        # x3 = [1, 2, 3, 4, 5]
-        # y3 = [15, 25, 35, 45, 55]
-        # spectro1_widget.plot(x3, y3)
 
-        # Plot some data for spectro2
-        # x4 = [1, 2, 3, 4, 5]
-        # y4 = [55, 45, 35, 25, 15]
-        # spectro2_widget.plot(x4, y4)
         self.ui.spectrogram_checkbox.stateChanged.connect(
             lambda state: self.show_hide_layout(self.ui.spectrograph_layout, state))
         self.show_hide_layout(self.ui.spectrograph_layout, False)
@@ -177,10 +148,29 @@ class MainWindow(QMainWindow):
                     item.widget().show()
 
     def load_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open Audio File", "", "Audio Files (*.wav *.mp3 *.flac)")
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open Audio File", "", "Audio Files (*.wav *.mp3 *.flac *.csv)")
+        #clear the previous signal
+        self.signal = Signal()
+        self.graph1.plots = []
+        self.graph2.plots = []
+        self.graph1.plot_to_track = None
+        self.graph2.plot_to_track = None
+        self.graph1.plot_widget.clear()
+        self.graph2.plot_widget.clear()
+
         try:
-            self.signal = Signal.from_file(file_path)
+            if not file_path.endswith(".csv"):
+                self.signal = Signal.load_signal_from_file(file_path)
+            else:
+                self.signal = Signal.load_signal_from_csv_y_only(file_path)
+
             self.update_spectrogram()
+            self.graph1.plot_signal(self.signal)
+            self.graph1.change_speed(30)
+            non_modified_signal = deepcopy(self.signal)
+            self.graph2.plot_signal(non_modified_signal)
+            self.graph2.change_speed(30)
+
         except Exception as e:
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
@@ -211,6 +201,11 @@ class MainWindow(QMainWindow):
             frequency_ranges = {sound: self.frequencies[sound] for sound in relevant_sounds}
 
             self.signal.equalize(slider_values, frequency_ranges)
+            plot = self.graph1.plot_to_track
+            plot.signal.data_pnts = self.signal.modified_data_pnts
+            plot.plot.setData([point[0] for point in plot.signal.data_pnts[:plot.last_point]], 
+                              [point[1] for point in plot.signal.data_pnts[:plot.last_point]])
+            
 
         self.update_spectrogram()
 
@@ -228,6 +223,35 @@ class MainWindow(QMainWindow):
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ecg")]
 
         return {sound: slider.value() / 50 for slider, sound in self.sliders.items() if slider in relevant_sliders}
+    def connect_graph_controls(self):
+        #zooming and panning for both graphs
+        
+        self.ui.graph_play_btn.clicked.connect(lambda:{
+            self.graph1.play_pause(),
+            self.graph2.play_pause()
+        })
+        self.ui.graph_speed_slider.valueChanged.connect(lambda value: {
+            self.graph1.change_speed(value),
+            self.graph2.change_speed(value)
+        })
+        self.ui.zoomin_btn.clicked.connect(lambda: {
+            self.graph1.zoom_in(),
+            self.graph2.zoom_in()
+        })
+        self.ui.zoomout_btn.clicked.connect(lambda: {
+            self.graph1.x_zoom(0.1),
+            self.graph2.x_zoom(0.1)
+        })
+        self.ui.reset_btn.clicked.connect(lambda: {
+            self.graph1.rewind(),
+            self.graph2.rewind()
+        })
+        self.ui.graph_speed_slider.setValue(30)
+        self.ui.graph_speed_slider.setTickInterval(1)
+        self.ui.graph_speed_slider.setTickPosition(2)
+        self.ui.graph_speed_slider.setSingleStep(1)
+        self.ui.graph_speed_slider.setMinimum(1)
+        self.ui.graph_speed_slider.setMaximum(30)
 
 
 if __name__ == "__main__":
