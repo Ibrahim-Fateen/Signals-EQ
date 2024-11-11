@@ -1,4 +1,6 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage , QPushButton, QWidget 
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
 import sys
 from PySide6.QtWidgets import QWidget
 from enum import Enum
@@ -7,6 +9,10 @@ from main_window import Ui_MainWindow
 from Spectrogram import SpectrogramWidget
 from Signal import Signal
 from copy import deepcopy
+from AudioPlayer import AudioPlayer
+import tempfile
+import os
+from scipy.io.wavfile import write
 
 
 class Mode(Enum):
@@ -23,7 +29,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.ui.controls_frame.setMinimumHeight(280)
         self.showMaximized()
-
+        self.modified_audio_path = None
         self.graph1 = Graph()
         self.graph2 = Graph()
 
@@ -109,6 +115,19 @@ class MainWindow(QMainWindow):
 
         self.signal = Signal()
         self.connect_graph_controls()
+        original_stop_btn = QPushButton("")
+        stop_icon = QIcon()
+        stop_icon.addFile(u"icons/stop.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        original_stop_btn.setIcon(stop_icon)
+
+        self.ui.horizontalLayout.addWidget(original_stop_btn)
+        #change its order 
+        self.original_audio = AudioPlayer(self.ui.aduio1_play_btn, self.ui.audio1_slider, self.ui.audio1_replay_btn, self.ui.audio1_time_label, original_stop_btn)
+        modified_stop_btn = QPushButton("")
+        modified_stop_btn.setIcon(stop_icon)
+        self.ui.horizontalLayout_2.addWidget(modified_stop_btn)
+        self.modified_audio = AudioPlayer(self.ui.audio2_play_btn, self.ui.audio2_slider, self.ui.audio2_replay_btn, self.ui.audio2_time_label, modified_stop_btn)
+
 
     def show_selected_layout(self, index):
         # Hide all layouts
@@ -170,7 +189,9 @@ class MainWindow(QMainWindow):
             self.graph2.plot_signal(non_modified_signal)
             self.graph1.change_speed(10)
             self.graph2.change_speed(10)
-
+            self.original_audio.set_audio_file(file_path)
+            self.modified_audio_path = self.save_modified_audio_to_temp()
+            self.modified_audio.set_audio_file(self.modified_audio_path)
         except Exception as e:
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
@@ -181,6 +202,17 @@ class MainWindow(QMainWindow):
         self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
                                                    self.signal.sample_rate,
                                                    "Modified Signal")
+    def save_modified_audio_to_temp(self):
+        temp_dir = tempfile.gettempdir()
+        temp_file_path = os.path.join(temp_dir, "modified_audio.wav")
+        write(temp_file_path, self.signal.sample_rate, self.signal.get_modified_data())
+        return temp_file_path
+    
+    
+    def update_modified_audio(self):
+        write(self.modified_audio_path, self.signal.sample_rate, self.signal.get_modified_data())
+        self.modified_audio.remove_audio_file()
+        self.modified_audio.set_audio_file(self.modified_audio_path)
 
     def update_signal(self):
         if self.signal.original_data is None:
@@ -203,7 +235,8 @@ class MainWindow(QMainWindow):
             self.signal.equalize(slider_values, frequency_ranges)
 
         self.update_spectrogram()
-
+        self.update_modified_audio()
+        
         plot = self.graph1.plot_to_track
         plot.signal.data_pnts = self.signal.modified_data_pnts
         plot.plot.setData([point[0] for point in plot.signal.data_pnts[:plot.last_point]],

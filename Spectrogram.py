@@ -51,6 +51,7 @@ class SpectrogramWidget(QWidget):
         except Exception as e:
             print(f"An error occurred while plotting the spectrogram: {e}")
 
+    
     # def apply_slider_values(self, data, slider_values, sample_rate):
     #     fft_data = np.fft.rfft(data)
     #     frequencies = np.fft.rfftfreq(len(data), d=1 / sample_rate)
