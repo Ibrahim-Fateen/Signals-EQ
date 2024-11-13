@@ -37,13 +37,14 @@ class MainWindow(QMainWindow):
 
         self.frequencies = {
             # Animals
-            "Dog": [(40, 500)],
-            "Wolf": [(150, 1000)],
+            # "Dog": [(40, 500)],
+            "Owl": [(100, 500)],
+            "Turkey": [(500, 1200)],
+            "Frog": [(1000, 2500)],
             "Bird": [(2000, 8000)],
-            "Lion": [(20, 50)],
 
             # Musical Instruments
-            "Oud": [(100, 260)],
+            "Oud": [(140, 300)],
             "Nay": [(600, 1200)],
             "Violin": [(350, 450)],
             "Drums": [(70, 170)],
@@ -56,10 +57,10 @@ class MainWindow(QMainWindow):
         }
 
         self.sliders = {
-            self.ui.animal_slider1: "Dog",
-            self.ui.animal_slider2: "Wolf",
+            self.ui.animal_slider1: "Frog",
+            self.ui.animal_slider2: "Owl",
             self.ui.animal_slider3: "Bird",
-            self.ui.animal_slider4: "Lion",
+            self.ui.animal_slider4: "Turkey",
             self.ui.music_slider1: "Oud",
             self.ui.music_slider2: "Nay",
             self.ui.music_slider3: "Violin",
@@ -81,13 +82,13 @@ class MainWindow(QMainWindow):
         }
 
         self.ui.animal_label1.setPixmap(QPixmap(u"icons/dog.png"))
-        self.ui.animal_label1.setText("Dog")
+        self.ui.animal_label1.setText("Frog")
         self.ui.animal_label2.setPixmap(QPixmap(u"icons/wolf.png"))
-        self.ui.animal_label2.setText("Wolf")
+        self.ui.animal_label2.setText("Owl")
         self.ui.animal_label3.setPixmap(QPixmap(u"icons/bird.png"))
         self.ui.animal_label3.setText("Bird")
         self.ui.animal_label4.setPixmap(QPixmap(u"icons/lion.png"))
-        self.ui.animal_label4.setText("Lion")
+        self.ui.animal_label4.setText("Turkey")
 
         self.ui.ECG_label1.setText("Normal ECG")
         self.ui.ECG_label2.setText("Atrial Fibrillation")
@@ -229,6 +230,10 @@ class MainWindow(QMainWindow):
                 self.original_audio.set_audio_file(file_path)
                 self.modified_audio_path = self.save_modified_audio_to_temp()
                 self.modified_audio.set_audio_file(self.modified_audio_path)
+            else:
+                self.original_audio.remove_audio_file()
+                self.modified_audio.remove_audio_file()
+                self.modified_audio_path = None
             
             self.original_audio.slider.setDisabled(not is_audio)
             self.original_audio.play_button.setDisabled(not is_audio)
@@ -273,7 +278,7 @@ class MainWindow(QMainWindow):
             self.signal.equalize_uniform(slider_values)
         else:
             if self.current_mode == Mode.ANIMAL_SOUNDS:
-                relevant_sounds = ["Dog", "Wolf", "Bird", "Lion"]
+                relevant_sounds = ["Frog", "Owl", "Bird", "Turkey"]
             elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
                 relevant_sounds = ["Oud", "Nay", "Violin", "Drums"]
             elif self.current_mode == Mode.ECG:
