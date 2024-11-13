@@ -128,7 +128,7 @@ class Graph(QWidget):
         self.plot_widget.setXRange(0, 10, padding=0)
         self.plot_widget.setYRange(-1, 1, padding=0)
         self.timer = QTimer()
-        self.timer.setInterval(40)
+        self.timer.setInterval(200)
         self.timer.timeout.connect(self.update)
         self.interploation_cool_down = False
         self.counter = 0

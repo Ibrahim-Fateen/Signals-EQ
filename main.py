@@ -43,10 +43,10 @@ class MainWindow(QMainWindow):
             "Lion": [(20, 50)],
 
             # Musical Instruments
-            "Oud": [(100, 260)],
-            "Nay": [(600, 1200)],
-            "Violin": [(350, 450)],
-            "Drums": [(70, 170)],
+            "Oud": [(140, 300)],
+            "Nay": [(450, 8000)],
+            "Violin": [(300, 600)],
+            "Drums": [(20, 170)],
 
             # ECG
             "Normal": [(1, 10)],
@@ -349,8 +349,8 @@ class MainWindow(QMainWindow):
             self.graph2.rewind(),
             self.ui.graph_play_btn.setIcon(QIcon(u"icons/play.png"))
         })
-        self.ui.speed_slider.setValue(10)
-        self.ui.speed_slider.setRange(1, 30)
+        self.ui.speed_slider.setValue(50)
+        self.ui.speed_slider.setRange(1, 100)
 
 
 if __name__ == "__main__":
