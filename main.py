@@ -45,9 +45,9 @@ class MainWindow(QMainWindow):
 
             # Musical Instruments
             "Oud": [(140, 300)],
-            "Nay": [(600, 1200)],
-            "Violin": [(350, 450)],
-            "Drums": [(70, 170)],
+            "Nay": [(450, 8000)],
+            "Violin": [(300, 600)],
+            "Drums": [(20, 170)],
 
             # ECG
             "Normal": [(1, 10)],
@@ -234,7 +234,7 @@ class MainWindow(QMainWindow):
                 self.original_audio.remove_audio_file()
                 self.modified_audio.remove_audio_file()
                 self.modified_audio_path = None
-            
+
             self.original_audio.slider.setDisabled(not is_audio)
             self.original_audio.play_button.setDisabled(not is_audio)
             self.original_audio.replay_button.setDisabled(not is_audio)
@@ -354,8 +354,8 @@ class MainWindow(QMainWindow):
             self.graph2.rewind(),
             self.ui.graph_play_btn.setIcon(QIcon(u"icons/play.png"))
         })
-        self.ui.speed_slider.setValue(10)
-        self.ui.speed_slider.setRange(1, 30)
+        self.ui.speed_slider.setValue(50)
+        self.ui.speed_slider.setRange(1, 100)
 
 
 if __name__ == "__main__":
