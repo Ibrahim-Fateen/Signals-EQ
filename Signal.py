@@ -23,13 +23,16 @@ class Signal(DynamicSignal):
         Apply equalization with handling for overlapping frequency ranges.
 
         Args:
-            slider_values: Dictionary mapping sound names to their slider values (0-2) (0.5 = -6dB, 1 = 0dB, 2 = +6dB)
+            slider_values: Dictionary mapping sound names to their slider values (0-100)
             frequency_ranges_dict: Dictionary mapping sound names to their frequency ranges
         """
         gain_array = np.ones_like(self.frequencies, dtype=float)
 
         for sound_name, ranges in frequency_ranges_dict.items():
             slider_value = slider_values[sound_name]
+            db_gain = -50 + slider_value
+            linear_gain = 10 ** (db_gain / 20)
+
             if not isinstance(ranges, list):
                 ranges = [ranges]
 
@@ -39,8 +42,8 @@ class Signal(DynamicSignal):
                 pos_mask = (self.frequencies >= start) & (self.frequencies <= end)
                 neg_mask = (self.frequencies >= -end) & (self.frequencies <= -start)
 
-                gain_array[pos_mask] *= slider_value
-                gain_array[neg_mask] *= slider_value
+                gain_array[pos_mask] *= linear_gain
+                gain_array[neg_mask] *= linear_gain
 
         # Apply the combined gain to the spectrum
         self.modified_spectrum = self.original_spectrum * gain_array
@@ -53,7 +56,7 @@ class Signal(DynamicSignal):
         Calls equalize() with appropriate frequency ranges for each slider.
 
         Args:
-            slider_values: Dictionary mapping sound names to their slider values (0-2) (0.5 = -6dB, 1 = 0dB, 2 = +6dB)
+            slider_values: Dictionary mapping sound names to their slider values (0-100)
         """
         # Define frequency ranges for each slider
         maximum_frequency = self.get_maximum_frequency()

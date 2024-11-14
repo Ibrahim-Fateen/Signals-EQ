@@ -1,6 +1,7 @@
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage , QPushButton, QWidget
-from PySide6.QtCore import QSize
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage, QPushButton, QWidget, QSlider, \
+    QHBoxLayout, QVBoxLayout, QLabel
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QCheckBox
 import sys
@@ -37,7 +38,6 @@ class MainWindow(QMainWindow):
 
         self.frequencies = {
             # Animals
-            # "Dog": [(40, 500)],
             "Owl": [(100, 500)],
             "Turkey": [(500, 1200)],
             "Frog": [(1000, 2500)],
@@ -50,10 +50,10 @@ class MainWindow(QMainWindow):
             "Drums": [(20, 170)],
 
             # ECG
-            "Normal": [(1, 10)],
-            "Atrial Fibrillation": [(0.05, 0.5), (0.5, 5), (10, 50)],
-            "Ventricular Tachycardia": [(20, 100), (0.1, 1)],
-            "Ventricular Flutter": [(20, 100), (0.5, 5)]
+            "Normal": [(0.5, 3), (10, 40)],
+            "Atrial Fibrillation": [(3, 7)],
+            "Ventricular Tachycardia": [(1.5, 4), (40, 200)],
+            "Ventricular Flutter": [(4, 6), (20, 40)],
         }
 
         self.sliders = {
@@ -80,6 +80,37 @@ class MainWindow(QMainWindow):
             self.ui.uniform_slider9: "Uniform 9",
             self.ui.uniform_slider10: "Uniform 10"
         }
+
+        for slider in self.sliders.keys():
+            slider.setOrientation(Qt.Vertical)
+            slider.setMinimum(0)
+            slider.setMaximum(100)
+            slider.setTickPosition(QSlider.TicksLeft)
+            slider.setTickInterval(5)
+            slider.setValue(50)
+
+            # Create a layout to hold the slider and labels
+            slider_layout = QHBoxLayout()
+
+            # Add labels for each tick position
+            labels_layout = QVBoxLayout()
+            labels_layout.addWidget(QLabel("+50 dB"))
+            labels_layout.addStretch()
+            labels_layout.addWidget(QLabel("+25 dB"))
+            labels_layout.addStretch()
+            labels_layout.addWidget(QLabel("0 dB"))
+            labels_layout.addStretch()
+            labels_layout.addWidget(QLabel("-25 dB"))
+            labels_layout.addStretch()
+            labels_layout.addWidget(QLabel("-50 dB"))
+
+            # Add slider and labels layout side by side
+            slider_layout.addLayout(labels_layout)
+            slider_layout.addWidget(slider)
+
+            # Add slider layout to the parent layout
+            parent_layout = slider.parent().layout()
+            parent_layout.addLayout(slider_layout)
 
         self.ui.animal_label1.setPixmap(QPixmap(u"icons/dog.png"))
         self.ui.animal_label1.setText("Frog")
@@ -310,7 +341,7 @@ class MainWindow(QMainWindow):
         elif self.current_mode == Mode.ECG:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ECG")]
 
-        return {sound: slider.value() / 50 for slider, sound in self.sliders.items() if slider in relevant_sliders}
+        return {sound: slider.value() for slider, sound in self.sliders.items() if slider in relevant_sliders}
 
     def connect_graph_controls(self):
         #zooming and panning for both graphs
