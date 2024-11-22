@@ -29,8 +29,7 @@ class Signal(DynamicSignal):
         gain_array = np.ones_like(self.frequencies, dtype=float)
 
         for sound_name, ranges in frequency_ranges_dict.items():
-            slider_value = slider_values[sound_name]
-            db_gain = -50 + slider_value
+            db_gain = slider_values[sound_name]
             linear_gain = 10 ** (db_gain / 20)
 
             if not isinstance(ranges, list):

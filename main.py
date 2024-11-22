@@ -89,7 +89,6 @@ class MainWindow(QMainWindow):
             slider.setTickInterval(5)
             slider.setValue(50)
 
-            # Create a layout to hold the slider and labels
             slider_layout = QHBoxLayout()
 
             # Add labels for each tick position
@@ -104,13 +103,36 @@ class MainWindow(QMainWindow):
             labels_layout.addStretch()
             labels_layout.addWidget(QLabel("-50 dB"))
 
-            # Add slider and labels layout side by side
             slider_layout.addLayout(labels_layout)
             slider_layout.addWidget(slider)
+
+            tooltip_label = QLabel(self)
+            tooltip_label.setStyleSheet("background-color: rgb(100, 120, 200); border: 1px solid black; padding: 2px;")
+            tooltip_label.hide()
+
+            def show_slider_tooltip(value, slider=slider, label=tooltip_label):
+                db_value = -50 + (value * 100 / slider.maximum())
+                if db_value > 0:
+                    db_value = f"+{db_value:.1f}"
+                else:
+                    db_value = f"{db_value:.1f}"
+                label.setText(f"{db_value} dB")
+                slider_pos = slider.mapToGlobal(slider.rect().center())
+                label.move(slider_pos.x() + 20, slider_pos.y() - 70)
+                label.show()
+
+            def hide_slider_tooltip(label=tooltip_label):
+                label.hide()
+
+            slider.valueChanged.connect(lambda value, s=slider: show_slider_tooltip(value, s))
+            slider.sliderReleased.connect(lambda: hide_slider_tooltip())
+            slider.sliderReleased.connect(self.update_signal)
 
             # Add slider layout to the parent layout
             parent_layout = slider.parent().layout()
             parent_layout.addLayout(slider_layout)
+
+            slider.setValue(slider.maximum() // 2)
 
         self.ui.animal_label1.setPixmap(QPixmap(u"icons/dog.png"))
         self.ui.animal_label1.setText("Frog")
@@ -142,11 +164,7 @@ class MainWindow(QMainWindow):
         self.ui.uniform_label9.setText("Uniform 9")
         self.ui.uniform_label10.setText("Uniform 10")
 
-        for slider in self.sliders.keys():
-            slider.setValue(slider.maximum() // 2)
         self.current_mode = Mode.ANIMAL_SOUNDS
-        for slider in self.sliders.keys():
-            slider.sliderReleased.connect(self.update_signal)
 
         # Add the plot widget to the layout
         self.ui.graph2_widget.layout().addWidget(self.graph1)
@@ -341,7 +359,8 @@ class MainWindow(QMainWindow):
         elif self.current_mode == Mode.ECG:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ECG")]
 
-        return {sound: slider.value() for slider, sound in self.sliders.items() if slider in relevant_sliders}
+        # sliders values range from 0 to 100, I convert them to db values from -50 to 50
+        return {sound: -50 + slider.value() for slider, sound in self.sliders.items() if slider in relevant_sliders}
 
     def connect_graph_controls(self):
         #zooming and panning for both graphs
