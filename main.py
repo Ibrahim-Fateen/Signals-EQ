@@ -9,7 +9,6 @@ from PySide6.QtWidgets import QWidget
 from enum import Enum
 from Graph import Graph
 from main_window import Ui_MainWindow
-# from ui_mainwindow import Ui_MainWindow
 from Spectrogram import SpectrogramWidget
 from Signal import Signal
 from copy import deepcopy
@@ -17,6 +16,7 @@ from AudioPlayer import AudioPlayer
 import tempfile
 import os
 from scipy.io.wavfile import write
+from FrequencyGraph import FrequencyGraph
 
 
 class Mode(Enum):
@@ -204,22 +204,23 @@ class MainWindow(QMainWindow):
         original_stop_btn.setIcon(stop_icon)
 
         self.ui.horizontalLayout.addWidget(original_stop_btn)
-        #change its order 
         self.original_audio = AudioPlayer(self.ui.aduio1_play_btn, self.ui.audio1_slider, self.ui.audio1_replay_btn, self.ui.audio1_time_label, original_stop_btn)
         modified_stop_btn = QPushButton("")
         modified_stop_btn.setIcon(stop_icon)
         self.ui.horizontalLayout_2.addWidget(modified_stop_btn)
         self.modified_audio = AudioPlayer(self.ui.audio2_play_btn, self.ui.audio2_slider, self.ui.audio2_replay_btn, self.ui.audio2_time_label, modified_stop_btn)
         self.log_scale_checkbox = QCheckBox("Use Audiogram Scale")
-        self.log_scale_checkbox.setMaximumWidth(200)
+        self.log_scale_checkbox.setMaximumWidth(220)
         self.ui.horizontalLayout_3.addWidget(self.log_scale_checkbox)
         self.log_scale_checkbox.stateChanged.connect(lambda state: self.update_spectrogram())
+        self.frequency_graph = FrequencyGraph()
         self.setup_fourier_graph()
+
     def setup_fourier_graph(self):
         self.fourier_checkbox = QCheckBox("Show Fourier Transform")
         self.fourier_checkbox.setMaximumWidth(200)
         self.ui.horizontalLayout_3.addWidget(self.fourier_checkbox)
-        self.fourier_widget = QWidget(self.ui.controls_frame)
+        self.fourier_widget = self.frequency_graph.plot_widget
         self.fourier_widget.setObjectName(u"fourier_widget")
         self.fourier_widget.setMinimumSize(QSize(380, 0))
         self.ui.horizontalLayout_10.addWidget(self.fourier_widget)
@@ -311,12 +312,15 @@ class MainWindow(QMainWindow):
     def update_spectrogram(self):
         scale = 'audiogram' if self.log_scale_checkbox.isChecked() else 'linear'
 
-        self.original_spectrogram.plot_spectrogram(self.signal.original_data,
-                                                   self.signal.sample_rate,
-                                                   "Original Signal", scale)
-        self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
-                                                   self.signal.sample_rate,
-                                                   "Modified Signal", scale)
+        self.frequency_graph.draw_magnitudes(self.signal.original_spectrum, self.signal.modified_spectrum,
+                                             self.signal.frequencies, scale)
+        if self.ui.spectrogram_checkbox.isChecked():
+            self.original_spectrogram.plot_spectrogram(self.signal.original_data,
+                                                       self.signal.sample_rate,
+                                                       "Original Signal", scale)
+            self.modified_spectrogram.plot_spectrogram(self.signal.get_modified_data(),
+                                                       self.signal.sample_rate,
+                                                       "Modified Signal", scale)
 
     def save_modified_audio_to_temp(self):
         temp_dir = tempfile.gettempdir()
@@ -371,7 +375,6 @@ class MainWindow(QMainWindow):
         elif self.current_mode == Mode.ECG:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ECG")]
 
-        # sliders values range from 0 to 100, I convert them to db values from -50 to 50
         return {sound: -50 + slider.value() for slider, sound in self.sliders.items() if slider in relevant_sliders}
 
     def connect_graph_controls(self):
