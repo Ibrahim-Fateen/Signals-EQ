@@ -190,30 +190,36 @@ class Graph(QWidget):
             self.custom_viewbox.selectseoncdX = None
             return cropped_signal
         return None
-    def plot_signal(self, signal: Signal,last_point:int = 0 , shift : int= 0) -> Plot:
-
-        signal =copy.deepcopy(signal)
-        # print(last_point)
-        # add the shift to the x values
-        signal.data_pnts = [(x + shift, y) for x, y in signal.data_pnts]
+    def plot_signal(self, signal: Signal, last_point: int = 0, shift: int = 0) -> Plot:
+        # signal = copy.deepcopy(signal)
+        # signal.data_pnts = [(x + shift, y) for x, y in signal.data_pnts]
+        
         for plot in self.plots:
             if plot.signal.label == signal.label:
                 return plot
-        x_values = [point[0] for point in signal.data_pnts]
-        y_values = [point[1] for point in signal.data_pnts]
+        
+        x_values = np.array([point[0] for point in signal.data_pnts])
+        y_values = np.array([point[1] for point in signal.data_pnts])
+        
         curve = pg.PlotDataItem(x_values[:last_point], y_values[:last_point], pen=pg.mkPen(signal.color, width=2))
         label = pg.TextItem(text=signal.label, color=signal.color, anchor=(1, 1))
+        
         self.plot_widget.addItem(label)
+        
         plot = Plot(curve, signal, label)
         plot.last_point = last_point
         plot.signal.shift = shift
+        
         self.plot_widget.addItem(plot.plot)
+        
         if len(self.plots) == 0:
             self.plot_to_track = plot
-            self.change_pan_window(plot,0.05)
+            self.change_pan_window(plot, 0.05)
             self.timer.start()
+        
         self.plots.append(plot)
         self.plot_to_track = plot
+        
         return plot
     
     def sihftX(self,shift:float):
