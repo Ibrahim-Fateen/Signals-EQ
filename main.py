@@ -221,7 +221,7 @@ class MainWindow(QMainWindow):
         self.ui.horizontalLayout_3.addWidget(self.fourier_checkbox)
         self.fourier_widget = QWidget(self.ui.controls_frame)
         self.fourier_widget.setObjectName(u"fourier_widget")
-        self.fourier_widget.setMinimumSize(QSize(400, 0))
+        self.fourier_widget.setMinimumSize(QSize(380, 0))
         self.ui.horizontalLayout_10.addWidget(self.fourier_widget)
         self.fourier_checkbox.stateChanged.connect(lambda state: self.show_hide_widget(self.fourier_widget, state))
         self.show_hide_widget(self.fourier_widget, False)
