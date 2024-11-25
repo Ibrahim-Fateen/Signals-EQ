@@ -102,6 +102,8 @@ class Signal(DynamicSignal):
 
     @staticmethod
     def load_signal_from_file(file_path):
+        if file_path == "":
+            return None
         try:
             signal = Signal()
             data, sample_rate = librosa.load(file_path)

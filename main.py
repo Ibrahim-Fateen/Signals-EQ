@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QWidget
 from enum import Enum
 from Graph import Graph
 from main_window import Ui_MainWindow
+# from ui_mainwindow import Ui_MainWindow
 from Spectrogram import SpectrogramWidget
 from Signal import Signal
 from copy import deepcopy
@@ -211,8 +212,19 @@ class MainWindow(QMainWindow):
         self.modified_audio = AudioPlayer(self.ui.audio2_play_btn, self.ui.audio2_slider, self.ui.audio2_replay_btn, self.ui.audio2_time_label, modified_stop_btn)
         self.log_scale_checkbox = QCheckBox("Use Audiogram Scale")
         self.log_scale_checkbox.setMaximumWidth(200)
-        self.ui.verticalLayout_20.addWidget(self.log_scale_checkbox)
+        self.ui.horizontalLayout_3.addWidget(self.log_scale_checkbox)
         self.log_scale_checkbox.stateChanged.connect(lambda state: self.update_spectrogram())
+        self.setup_fourier_graph()
+    def setup_fourier_graph(self):
+        self.fourier_checkbox = QCheckBox("Show Fourier Transform")
+        self.fourier_checkbox.setMaximumWidth(200)
+        self.ui.horizontalLayout_3.addWidget(self.fourier_checkbox)
+        self.fourier_widget = QWidget(self.ui.controls_frame)
+        self.fourier_widget.setObjectName(u"fourier_widget")
+        self.fourier_widget.setMinimumSize(QSize(400, 0))
+        self.ui.horizontalLayout_10.addWidget(self.fourier_widget)
+        self.fourier_checkbox.stateChanged.connect(lambda state: self.show_hide_widget(self.fourier_widget, state))
+        self.show_hide_widget(self.fourier_widget, False)
 
     def show_selected_layout(self, index):
         # Hide all layouts

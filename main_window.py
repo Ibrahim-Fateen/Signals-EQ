@@ -1521,7 +1521,7 @@ class Ui_MainWindow(object):
         self.spectrogram_checkbox.setObjectName(u"spectrogram_checkbox")
         self.spectrogram_checkbox.setMaximumSize(QSize(150, 16777215))
 
-        self.verticalLayout_20.addWidget(self.spectrogram_checkbox)
+        self.horizontalLayout_3.addWidget(self.spectrogram_checkbox)
 
 
         self.horizontalLayout_10.addWidget(self.sliders_widget)
