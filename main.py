@@ -266,6 +266,7 @@ class MainWindow(QMainWindow):
 
     def load_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Signal File", "", "Audio Files (*.wav *.mp3 *.flac *.csv)")
+        if file_path == "": return
         #clear the previous signal
         self.signal = Signal()
         if self.graph1.plots or self.graph2.plots:
