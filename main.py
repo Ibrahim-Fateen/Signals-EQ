@@ -45,10 +45,10 @@ class MainWindow(QMainWindow):
             "Bird": [(2000, 8000)],
 
             # Musical Instruments
-            "Oud": [(140, 300)],
-            "Nay": [(450, 8000)],
-            "Violin": [(300, 600)],
-            "Drums": [(20, 170)],
+            "Guitar": [(40,400)],
+            "Flute": [(400, 800)],
+            "Violin": [(950, 4000)],
+            "Xylophone": [(5000, 14000)],
 
             # ECG
             "Normal": [(0.5, 3), (10, 40)],
@@ -62,10 +62,10 @@ class MainWindow(QMainWindow):
             self.ui.animal_slider2: "Owl",
             self.ui.animal_slider3: "Bird",
             self.ui.animal_slider4: "Turkey",
-            self.ui.music_slider1: "Oud",
-            self.ui.music_slider2: "Nay",
+            self.ui.music_slider1: "Guitar",
+            self.ui.music_slider2: "Flute",
             self.ui.music_slider3: "Violin",
-            self.ui.music_slider4: "Drums",
+            self.ui.music_slider4: "Xylophone",
             self.ui.ECG_slider1: "Normal",
             self.ui.ECG_slider2: "Atrial Fibrillation",
             self.ui.ECG_slider3: "Ventricular Tachycardia",
@@ -149,10 +149,10 @@ class MainWindow(QMainWindow):
         self.ui.ECG_label3.setText("Ventricular Tachycardia")
         self.ui.ECG_label4.setText("Ventricular Flutter")
 
-        self.ui.music_label1.setText("Oud")
-        self.ui.music_label2.setText("Nay")
+        self.ui.music_label1.setText("Guitar")
+        self.ui.music_label2.setText("Flute")
         self.ui.music_label3.setText("Violin")
-        self.ui.music_label4.setText("Drums")
+        self.ui.music_label4.setText("Xylophone")
 
         self.ui.uniform_label1.setText(" 1k Hz")
         self.ui.uniform_label2.setText(" 2k Hz")
@@ -349,7 +349,7 @@ class MainWindow(QMainWindow):
             if self.current_mode == Mode.ANIMAL_SOUNDS:
                 relevant_sounds = ["Frog", "Owl", "Bird", "Turkey"]
             elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
-                relevant_sounds = ["Oud", "Nay", "Violin", "Drums"]
+                relevant_sounds = ["Guitar", "Flute", "Violin", "Xylophone"]
             elif self.current_mode == Mode.ECG:
                 relevant_sounds = ["Normal", "Atrial Fibrillation", "Ventricular Tachycardia", "Ventricular Flutter"]
 
