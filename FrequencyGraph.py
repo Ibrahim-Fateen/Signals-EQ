@@ -10,7 +10,7 @@ class FrequencyGraph:
         self.legend.setParentItem(self.plot_widget.plotItem)
         # self.legend.hide()
 
-        self.plot_widget.plotItem.setTitle("DFT Magnitude Plot")
+        self.plot_widget.plotItem.setTitle("")
         self.plot_widget.plotItem.setLabel(axis="left", text="|F(f)|")  # \u03C9
         self.plot_widget.plotItem.setLabel(axis="bottom", text="f", units="HZ")
         self.plot_widget.plotItem.showGrid(x=True)

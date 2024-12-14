@@ -249,14 +249,16 @@ class MainWindow(QMainWindow):
 
     def load_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Signal File", "", "Audio Files (*.wav *.mp3 *.flac *.csv)")
+        if file_path == "": return
         #clear the previous signal
         self.signal = Signal()
-        self.graph1.plots = []
-        self.graph2.plots = []
-        self.graph1.plot_to_track = None
-        self.graph2.plot_to_track = None
-        self.graph1.plot_widget.clear()
-        self.graph2.plot_widget.clear()
+        if self.graph1.plots or self.graph2.plots:
+            self.graph1.plots = []
+            self.graph2.plots = []
+            self.graph1.plot_to_track = None
+            self.graph2.plot_to_track = None
+            self.graph1.plot_widget.clear()
+            self.graph2.plot_widget.clear()
 
         try:
             if not file_path.endswith(".csv"):
@@ -268,8 +270,9 @@ class MainWindow(QMainWindow):
             non_modified_signal = deepcopy(self.signal)
             self.graph1.plot_signal(self.signal)
             self.graph2.plot_signal(non_modified_signal)
-            self.graph1.change_speed(10)
-            self.graph2.change_speed(10)
+            self.graph1.change_speed(50)
+            self.graph2.change_speed(50)
+            self.ui.graph_play_btn.setIcon(QIcon(u"icons/pause.png"))
             is_audio = not file_path.endswith(".csv")
             if is_audio:
                 self.original_audio.set_audio_file(file_path)
@@ -292,12 +295,12 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QErrorMessage(self).showMessage(f"An error occurred while loading the file: {e}")
 
-    def update_spectrogram(self):
+    def update_spectrogram(self,first_time=False):
         scale = 'audiogram' if self.log_scale_checkbox.isChecked() else 'linear'
 
         self.frequency_graph.draw_magnitudes(self.signal.original_spectrum, self.signal.modified_spectrum,
                                              self.signal.frequencies, scale)
-        if self.ui.spectrogram_checkbox.isChecked():
+        if self.ui.spectrogram_checkbox.isChecked() or first_time:
             self.original_spectrogram.plot_spectrogram(self.signal.original_data,
                                                        self.signal.sample_rate,
                                                        "Original Signal", scale)
@@ -401,7 +404,7 @@ class MainWindow(QMainWindow):
             self.ui.graph_play_btn.setIcon(QIcon(u"icons/play.png"))
         })
         self.ui.speed_slider.setValue(50)
-        self.ui.speed_slider.setRange(1, 100)
+        self.ui.speed_slider.setRange(1, 200)
 
 
 if __name__ == "__main__":

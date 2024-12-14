@@ -35,6 +35,7 @@ class Signal(DynamicSignal):
             if not isinstance(ranges, list):
                 ranges = [ranges]
 
+            print(f"ranges are : {ranges}")
             for freq_range in ranges:
                 start, end = freq_range
 
