@@ -1,4 +1,3 @@
-from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage, QPushButton, QWidget, QSlider, \
     QHBoxLayout, QVBoxLayout, QLabel
 from PySide6.QtCore import QSize, Qt
@@ -20,9 +19,9 @@ from FrequencyGraph import FrequencyGraph
 
 
 class Mode(Enum):
-    ANIMAL_SOUNDS = 0
-    MUSICAL_INSTRUMENTS = 1
-    ECG = 2
+    MUSIC_AND_VOWELS = 0
+    MUSIC_AND_ANIMALS = 1
+    WEINER_FILTER = 2
     UNIFORM = 3
 
 
@@ -37,39 +36,32 @@ class MainWindow(QMainWindow):
         self.graph1 = Graph()
         self.graph2 = Graph()
 
-        self.frequencies = {
-            # Animals
-            "Owl": [(100, 500)],
-            "Turkey": [(500, 1200)],
-            "Frog": [(1000, 2500)],
-            "Bird": [(2000, 8000)],
+        self.vowels_mode_frequencies = {
+            "A": [(600, 900), (1000, 1180)],
+            "UH": [(400, 600), (1130, 1250)],
+            "Violin": [(300, 400), (900, 1000), (1500, 3200)],
+            "Drum": [(0, 300)]
+        }
 
-            # Musical Instruments
+        self.animal_mode_frequencies = {
+            "Dog": [(100, 500)],
+            "Cow": [(500, 1200)],
+            "Donkey": [(1000, 2500)],
+            "Claps": [(2000, 8000)],
             "Oud": [(140, 300)],
             "Nay": [(450, 8000)],
-            "Violin": [(300, 600)],
-            "Drums": [(20, 170)],
-
-            # ECG
-            "Normal": [(0.5, 3), (10, 40)],
-            "Atrial Fibrillation": [(3, 7)],
-            "Ventricular Tachycardia": [(1.5, 4), (40, 200)],
-            "Ventricular Flutter": [(4, 6), (20, 40)],
         }
 
         self.sliders = {
-            self.ui.animal_slider1: "Frog",
-            self.ui.animal_slider2: "Owl",
-            self.ui.animal_slider3: "Bird",
-            self.ui.animal_slider4: "Turkey",
+            self.ui.animal_slider1: "Violin",
+            self.ui.animal_slider2: "Drum",
+            self.ui.animal_slider3: "A",
+            self.ui.animal_slider4: "UH",
             self.ui.music_slider1: "Oud",
             self.ui.music_slider2: "Nay",
             self.ui.music_slider3: "Violin",
             self.ui.music_slider4: "Drums",
             self.ui.ECG_slider1: "Normal",
-            self.ui.ECG_slider2: "Atrial Fibrillation",
-            self.ui.ECG_slider3: "Ventricular Tachycardia",
-            self.ui.ECG_slider4: "Ventricular Flutter",
             self.ui.uniform_slider1: "Uniform 1",
             self.ui.uniform_slider2: "Uniform 2",
             self.ui.uniform_slider3: "Uniform 3",
@@ -135,19 +127,10 @@ class MainWindow(QMainWindow):
 
             slider.setValue(slider.maximum() // 2)
 
-        self.ui.animal_label1.setPixmap(QPixmap(u"icons/dog.png"))
-        self.ui.animal_label1.setText("Frog")
-        self.ui.animal_label2.setPixmap(QPixmap(u"icons/wolf.png"))
-        self.ui.animal_label2.setText("Owl")
-        self.ui.animal_label3.setPixmap(QPixmap(u"icons/bird.png"))
-        self.ui.animal_label3.setText("Bird")
-        self.ui.animal_label4.setPixmap(QPixmap(u"icons/lion.png"))
-        self.ui.animal_label4.setText("Turkey")
-
-        self.ui.ECG_label1.setText("Normal ECG")
-        self.ui.ECG_label2.setText("Atrial Fibrillation")
-        self.ui.ECG_label3.setText("Ventricular Tachycardia")
-        self.ui.ECG_label4.setText("Ventricular Flutter")
+        self.ui.animal_label1.setText("Violin")
+        self.ui.animal_label2.setText("Drum")
+        self.ui.animal_label3.setText("A")
+        self.ui.animal_label4.setText("UH")
 
         self.ui.music_label1.setText("Oud")
         self.ui.music_label2.setText("Nay")
@@ -165,7 +148,7 @@ class MainWindow(QMainWindow):
         self.ui.uniform_label9.setText("Uniform 9")
         self.ui.uniform_label10.setText("Uniform 10")
 
-        self.current_mode = Mode.ANIMAL_SOUNDS
+        self.current_mode = Mode.MUSIC_AND_VOWELS
 
         # Add the plot widget to the layout
         self.ui.graph2_widget.layout().addWidget(self.graph1)
@@ -185,9 +168,9 @@ class MainWindow(QMainWindow):
         self.show_hide_layout(self.ui.spectrograph_layout, False)
 
         # Add layouts to the combo box
-        self.ui.modes_combo.addItem("Animal")
-        self.ui.modes_combo.addItem("Music")
-        self.ui.modes_combo.addItem("ECG")
+        self.ui.modes_combo.addItem("Instruments and Vowels")
+        self.ui.modes_combo.addItem("Instruments and Animals")
+        self.ui.modes_combo.addItem("Weiner Filter")
         self.ui.modes_combo.addItem("Uniform")
 
         # Connect combo box selection change to a function
@@ -237,13 +220,13 @@ class MainWindow(QMainWindow):
         # Show the selected layout
         if index == 0:
             self.show_hide_widget(self.ui.animal_widget, True)
-            self.current_mode = Mode.ANIMAL_SOUNDS
+            self.current_mode = Mode.MUSIC_AND_VOWELS
         elif index == 1:
             self.show_hide_widget(self.ui.music_widget, True)
-            self.current_mode = Mode.MUSICAL_INSTRUMENTS
+            self.current_mode = Mode.MUSIC_AND_ANIMALS
         elif index == 2:
             self.show_hide_widget(self.ui.ECG_widget, True)
-            self.current_mode = Mode.ECG
+            self.current_mode = Mode.WEINER_FILTER
         elif index == 3:
             self.show_hide_widget(self.ui.uniform_widget, True)
             self.current_mode = Mode.UNIFORM
@@ -341,15 +324,13 @@ class MainWindow(QMainWindow):
 
         if self.current_mode == Mode.UNIFORM:
             self.signal.equalize_uniform(slider_values)
+        elif self.current_mode == Mode.WEINER_FILTER:
+            pass
         else:
-            if self.current_mode == Mode.ANIMAL_SOUNDS:
-                relevant_sounds = ["Frog", "Owl", "Bird", "Turkey"]
-            elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
-                relevant_sounds = ["Oud", "Nay", "Violin", "Drums"]
-            elif self.current_mode == Mode.ECG:
-                relevant_sounds = ["Normal", "Atrial Fibrillation", "Ventricular Tachycardia", "Ventricular Flutter"]
-
-            frequency_ranges = {sound: self.frequencies[sound] for sound in relevant_sounds}
+            if self.current_mode == Mode.MUSIC_AND_VOWELS:
+                frequency_ranges = self.vowels_mode_frequencies
+            else:
+                frequency_ranges = self.animal_mode_frequencies
 
             self.signal.equalize(slider_values, frequency_ranges)
 
@@ -368,12 +349,12 @@ class MainWindow(QMainWindow):
         # filter sliders based on mode selected
         if self.current_mode == Mode.UNIFORM:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("uniform")]
-        elif self.current_mode == Mode.ANIMAL_SOUNDS:
+        elif self.current_mode == Mode.MUSIC_AND_VOWELS:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("animal")]
-        elif self.current_mode == Mode.MUSICAL_INSTRUMENTS:
+        elif self.current_mode == Mode.MUSIC_AND_ANIMALS:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("music")]
-        elif self.current_mode == Mode.ECG:
-            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("ECG")]
+        else:
+            return
 
         return {sound: -50 + slider.value() for slider, sound in self.sliders.items() if slider in relevant_sliders}
 
