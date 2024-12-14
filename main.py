@@ -21,7 +21,7 @@ from FrequencyGraph import FrequencyGraph
 class Mode(Enum):
     MUSIC_AND_VOWELS = 0
     MUSIC_AND_ANIMALS = 1
-    WEINER_FILTER = 2
+    WIENER_FILTER = 2
     UNIFORM = 3
 
 
@@ -226,7 +226,7 @@ class MainWindow(QMainWindow):
             self.current_mode = Mode.MUSIC_AND_ANIMALS
         elif index == 2:
             self.show_hide_widget(self.ui.ECG_widget, True)
-            self.current_mode = Mode.WEINER_FILTER
+            self.current_mode = Mode.WIENER_FILTER
         elif index == 3:
             self.show_hide_widget(self.ui.uniform_widget, True)
             self.current_mode = Mode.UNIFORM
@@ -327,7 +327,7 @@ class MainWindow(QMainWindow):
 
         if self.current_mode == Mode.UNIFORM:
             self.signal.equalize_uniform(slider_values)
-        elif self.current_mode == Mode.WEINER_FILTER:
+        elif self.current_mode == Mode.WIENER_FILTER:
             pass
         else:
             if self.current_mode == Mode.MUSIC_AND_VOWELS:
