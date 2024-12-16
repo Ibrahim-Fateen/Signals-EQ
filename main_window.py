@@ -554,15 +554,14 @@ class Ui_MainWindow(object):
         self.spectrograph_layout.setObjectName(u"spectrograph_layout")
         self.spectro1_widget = QWidget(self.graphs_widget)
         self.spectro1_widget.setObjectName(u"spectro1_widget")
-        self.spectro1_widget.setMinimumHeight(230)
         self.verticalLayout_30 = QVBoxLayout(self.spectro1_widget)
         self.verticalLayout_30.setSpacing(0)
         self.verticalLayout_30.setObjectName(u"verticalLayout_30")
         self.verticalLayout_30.setContentsMargins(0, 0, 0, 0)
-        self.original_spectro_label = QLabel()
+        self.original_spectro_label = QLabel(self.spectro1_widget)
         self.original_spectro_label.setObjectName(u"original_spectro_label")
 
-        # self.verticalLayout_30.addWidget(self.original_spectro_label)
+        self.verticalLayout_30.addWidget(self.original_spectro_label)
 
 
         self.spectrograph_layout.addWidget(self.spectro1_widget)
@@ -573,10 +572,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_31.setSpacing(0)
         self.verticalLayout_31.setObjectName(u"verticalLayout_31")
         self.verticalLayout_31.setContentsMargins(0, 0, 0, 0)
-        self.equalized_spectro_label = QLabel()
+        self.equalized_spectro_label = QLabel(self.spectro2_widget)
         self.equalized_spectro_label.setObjectName(u"equalized_spectro_label")
 
-        # self.verticalLayout_31.addWidget(self.equalized_spectro_label)
+        self.verticalLayout_31.addWidget(self.equalized_spectro_label)
 
 
         self.spectrograph_layout.addWidget(self.spectro2_widget)
@@ -636,7 +635,7 @@ class Ui_MainWindow(object):
         self.speed_slider = QSlider(self.graphs_widget)
         self.speed_slider.setObjectName(u"speed_slider")
         self.speed_slider.setMaximumSize(QSize(200, 150))
-        self.speed_slider.setOrientation(Qt.Horizontal)
+        self.speed_slider.setOrientation(Qt.Orientation.Horizontal)
 
         self.horizontalLayout_4.addWidget(self.speed_slider)
 
@@ -657,15 +656,15 @@ class Ui_MainWindow(object):
         self.controls_frame.setObjectName(u"controls_frame")
         self.controls_frame.setMaximumSize(QSize(16777215, 350))
         self.controls_frame.setStyleSheet(u"background-color: rgb(28, 32, 43);")
-        self.controls_frame.setFrameShape(QFrame.StyledPanel)
-        self.controls_frame.setFrameShadow(QFrame.Plain)
+        self.controls_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.controls_frame.setFrameShadow(QFrame.Shadow.Plain)
         self.horizontalLayout_10 = QHBoxLayout(self.controls_frame)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.horizontalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.audio_widget = QWidget(self.controls_frame)
         self.audio_widget.setObjectName(u"audio_widget")
-        self.audio_widget.setMinimumSize(QSize(250, 0))
-        self.audio_widget.setMaximumSize(QSize(250, 16777215))
+        self.audio_widget.setMinimumSize(QSize(300, 0))
+        self.audio_widget.setMaximumSize(QSize(300, 16777215))
         self.verticalLayout_21 = QVBoxLayout(self.audio_widget)
         self.verticalLayout_21.setObjectName(u"verticalLayout_21")
         self.verticalLayout_2 = QVBoxLayout()
@@ -680,7 +679,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.audio1_slider = QSlider(self.audio_widget)
         self.audio1_slider.setObjectName(u"audio1_slider")
-        self.audio1_slider.setOrientation(Qt.Horizontal)
+        self.audio1_slider.setOrientation(Qt.Orientation.Horizontal)
 
         self.horizontalLayout.addWidget(self.audio1_slider)
 
@@ -719,7 +718,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.audio2_slider = QSlider(self.audio_widget)
         self.audio2_slider.setObjectName(u"audio2_slider")
-        self.audio2_slider.setOrientation(Qt.Horizontal)
+        self.audio2_slider.setOrientation(Qt.Orientation.Horizontal)
 
         self.horizontalLayout_2.addWidget(self.audio2_slider)
 
@@ -778,13 +777,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.uniform_label1 = QLabel(self.uniform_slider_widget1)
         self.uniform_label1.setObjectName(u"uniform_label1")
-        self.uniform_label1.setAlignment(Qt.AlignCenter)
+        self.uniform_label1.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_4.addWidget(self.uniform_label1)
 
         self.uniform_slider1 = QSlider(self.uniform_slider_widget1)
         self.uniform_slider1.setObjectName(u"uniform_slider1")
-        self.uniform_slider1.setOrientation(Qt.Vertical)
+        self.uniform_slider1.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_4.addWidget(self.uniform_slider1)
 
@@ -812,13 +811,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.uniform_label2 = QLabel(self.uniform_slider_widget2)
         self.uniform_label2.setObjectName(u"uniform_label2")
-        self.uniform_label2.setAlignment(Qt.AlignCenter)
+        self.uniform_label2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_5.addWidget(self.uniform_label2)
 
         self.uniform_slider2 = QSlider(self.uniform_slider_widget2)
         self.uniform_slider2.setObjectName(u"uniform_slider2")
-        self.uniform_slider2.setOrientation(Qt.Vertical)
+        self.uniform_slider2.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_5.addWidget(self.uniform_slider2)
 
@@ -846,13 +845,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.uniform_label3 = QLabel(self.uniform_slider_widget3)
         self.uniform_label3.setObjectName(u"uniform_label3")
-        self.uniform_label3.setAlignment(Qt.AlignCenter)
+        self.uniform_label3.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_6.addWidget(self.uniform_label3)
 
         self.uniform_slider3 = QSlider(self.uniform_slider_widget3)
         self.uniform_slider3.setObjectName(u"uniform_slider3")
-        self.uniform_slider3.setOrientation(Qt.Vertical)
+        self.uniform_slider3.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_6.addWidget(self.uniform_slider3)
 
@@ -880,13 +879,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_27.setObjectName(u"verticalLayout_27")
         self.uniform_label4 = QLabel(self.uniform_slider_widget4)
         self.uniform_label4.setObjectName(u"uniform_label4")
-        self.uniform_label4.setAlignment(Qt.AlignCenter)
+        self.uniform_label4.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_27.addWidget(self.uniform_label4)
 
         self.uniform_slider4 = QSlider(self.uniform_slider_widget4)
         self.uniform_slider4.setObjectName(u"uniform_slider4")
-        self.uniform_slider4.setOrientation(Qt.Vertical)
+        self.uniform_slider4.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_27.addWidget(self.uniform_slider4)
 
@@ -914,13 +913,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_23.setObjectName(u"verticalLayout_23")
         self.uniform_label5 = QLabel(self.uniform_slider_widget5)
         self.uniform_label5.setObjectName(u"uniform_label5")
-        self.uniform_label5.setAlignment(Qt.AlignCenter)
+        self.uniform_label5.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_23.addWidget(self.uniform_label5)
 
         self.uniform_slider5 = QSlider(self.uniform_slider_widget5)
         self.uniform_slider5.setObjectName(u"uniform_slider5")
-        self.uniform_slider5.setOrientation(Qt.Vertical)
+        self.uniform_slider5.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_23.addWidget(self.uniform_slider5)
 
@@ -948,13 +947,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_25.setObjectName(u"verticalLayout_25")
         self.uniform_label6 = QLabel(self.uniform_slider_widget6)
         self.uniform_label6.setObjectName(u"uniform_label6")
-        self.uniform_label6.setAlignment(Qt.AlignCenter)
+        self.uniform_label6.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_25.addWidget(self.uniform_label6)
 
         self.uniform_slider6 = QSlider(self.uniform_slider_widget6)
         self.uniform_slider6.setObjectName(u"uniform_slider6")
-        self.uniform_slider6.setOrientation(Qt.Vertical)
+        self.uniform_slider6.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_25.addWidget(self.uniform_slider6)
 
@@ -982,13 +981,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_22.setObjectName(u"verticalLayout_22")
         self.uniform_label7 = QLabel(self.uniform_slider_widget7)
         self.uniform_label7.setObjectName(u"uniform_label7")
-        self.uniform_label7.setAlignment(Qt.AlignCenter)
+        self.uniform_label7.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_22.addWidget(self.uniform_label7)
 
         self.uniform_slider7 = QSlider(self.uniform_slider_widget7)
         self.uniform_slider7.setObjectName(u"uniform_slider7")
-        self.uniform_slider7.setOrientation(Qt.Vertical)
+        self.uniform_slider7.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_22.addWidget(self.uniform_slider7)
 
@@ -1016,13 +1015,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_24.setObjectName(u"verticalLayout_24")
         self.uniform_label8 = QLabel(self.uniform_slider_widget8)
         self.uniform_label8.setObjectName(u"uniform_label8")
-        self.uniform_label8.setAlignment(Qt.AlignCenter)
+        self.uniform_label8.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_24.addWidget(self.uniform_label8)
 
         self.uniform_slider8 = QSlider(self.uniform_slider_widget8)
         self.uniform_slider8.setObjectName(u"uniform_slider8")
-        self.uniform_slider8.setOrientation(Qt.Vertical)
+        self.uniform_slider8.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_24.addWidget(self.uniform_slider8)
 
@@ -1050,13 +1049,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_26.setObjectName(u"verticalLayout_26")
         self.uniform_label9 = QLabel(self.uniform_slider_widget9)
         self.uniform_label9.setObjectName(u"uniform_label9")
-        self.uniform_label9.setAlignment(Qt.AlignCenter)
+        self.uniform_label9.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_26.addWidget(self.uniform_label9)
 
         self.uniform_slider9 = QSlider(self.uniform_slider_widget9)
         self.uniform_slider9.setObjectName(u"uniform_slider9")
-        self.uniform_slider9.setOrientation(Qt.Vertical)
+        self.uniform_slider9.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_26.addWidget(self.uniform_slider9)
 
@@ -1084,13 +1083,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.uniform_label10 = QLabel(self.uniform_slider_widget10)
         self.uniform_label10.setObjectName(u"uniform_label10")
-        self.uniform_label10.setAlignment(Qt.AlignCenter)
+        self.uniform_label10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_7.addWidget(self.uniform_label10)
 
         self.uniform_slider10 = QSlider(self.uniform_slider_widget10)
         self.uniform_slider10.setObjectName(u"uniform_slider10")
-        self.uniform_slider10.setOrientation(Qt.Vertical)
+        self.uniform_slider10.setOrientation(Qt.Orientation.Vertical)
 
         self.verticalLayout_7.addWidget(self.uniform_slider10)
 
@@ -1104,30 +1103,30 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_20.addWidget(self.uniform_widget)
 
-        self.animal_widget = QWidget(self.sliders_widget)
-        self.animal_widget.setObjectName(u"animal_widget")
-        self.animal_layout = QHBoxLayout(self.animal_widget)
+        self.music_vowels_widget = QWidget(self.sliders_widget)
+        self.music_vowels_widget.setObjectName(u"music_vowels_widget")
+        self.animal_layout = QHBoxLayout(self.music_vowels_widget)
         self.animal_layout.setObjectName(u"animal_layout")
         self.animal_layout.setContentsMargins(0, 0, 0, 0)
         self.horizontalSpacer_23 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.animal_layout.addItem(self.horizontalSpacer_23)
 
-        self.animal_slider_widget1_2 = QWidget(self.animal_widget)
+        self.animal_slider_widget1_2 = QWidget(self.music_vowels_widget)
         self.animal_slider_widget1_2.setObjectName(u"animal_slider_widget1_2")
         self.animal_slider_widget1 = QVBoxLayout(self.animal_slider_widget1_2)
         self.animal_slider_widget1.setObjectName(u"animal_slider_widget1")
-        self.animal_label1 = QLabel(self.animal_slider_widget1_2)
-        self.animal_label1.setObjectName(u"animal_label1")
-        self.animal_label1.setAlignment(Qt.AlignCenter)
+        self.vowel_label1 = QLabel(self.animal_slider_widget1_2)
+        self.vowel_label1.setObjectName(u"vowel_label1")
+        self.vowel_label1.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.animal_slider_widget1.addWidget(self.animal_label1)
+        self.animal_slider_widget1.addWidget(self.vowel_label1)
 
-        self.animal_slider1 = QSlider(self.animal_slider_widget1_2)
-        self.animal_slider1.setObjectName(u"animal_slider1")
-        self.animal_slider1.setOrientation(Qt.Vertical)
+        self.vowel_slider1 = QSlider(self.animal_slider_widget1_2)
+        self.vowel_slider1.setObjectName(u"vowel_slider1")
+        self.vowel_slider1.setOrientation(Qt.Orientation.Vertical)
 
-        self.animal_slider_widget1.addWidget(self.animal_slider1)
+        self.animal_slider_widget1.addWidget(self.vowel_slider1)
 
 
         self.animal_layout.addWidget(self.animal_slider_widget1_2)
@@ -1136,7 +1135,7 @@ class Ui_MainWindow(object):
 
         self.animal_layout.addItem(self.horizontalSpacer_24)
 
-        self.line_4 = QFrame(self.animal_widget)
+        self.line_4 = QFrame(self.music_vowels_widget)
         self.line_4.setObjectName(u"line_4")
         self.line_4.setFrameShape(QFrame.Shape.VLine)
         self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1147,21 +1146,21 @@ class Ui_MainWindow(object):
 
         self.animal_layout.addItem(self.horizontalSpacer_25)
 
-        self.animal_slider_widget2 = QWidget(self.animal_widget)
+        self.animal_slider_widget2 = QWidget(self.music_vowels_widget)
         self.animal_slider_widget2.setObjectName(u"animal_slider_widget2")
         self.verticalLayout_9 = QVBoxLayout(self.animal_slider_widget2)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.animal_label2 = QLabel(self.animal_slider_widget2)
-        self.animal_label2.setObjectName(u"animal_label2")
-        self.animal_label2.setAlignment(Qt.AlignCenter)
+        self.vowel_label2 = QLabel(self.animal_slider_widget2)
+        self.vowel_label2.setObjectName(u"vowel_label2")
+        self.vowel_label2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_9.addWidget(self.animal_label2)
+        self.verticalLayout_9.addWidget(self.vowel_label2)
 
-        self.animal_slider2 = QSlider(self.animal_slider_widget2)
-        self.animal_slider2.setObjectName(u"animal_slider2")
-        self.animal_slider2.setOrientation(Qt.Vertical)
+        self.vowel_slider2 = QSlider(self.animal_slider_widget2)
+        self.vowel_slider2.setObjectName(u"vowel_slider2")
+        self.vowel_slider2.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_9.addWidget(self.animal_slider2)
+        self.verticalLayout_9.addWidget(self.vowel_slider2)
 
 
         self.animal_layout.addWidget(self.animal_slider_widget2)
@@ -1170,7 +1169,7 @@ class Ui_MainWindow(object):
 
         self.animal_layout.addItem(self.horizontalSpacer_26)
 
-        self.line_7 = QFrame(self.animal_widget)
+        self.line_7 = QFrame(self.music_vowels_widget)
         self.line_7.setObjectName(u"line_7")
         self.line_7.setFrameShape(QFrame.Shape.VLine)
         self.line_7.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1181,21 +1180,21 @@ class Ui_MainWindow(object):
 
         self.animal_layout.addItem(self.horizontalSpacer_27)
 
-        self.animal_slider_widget3 = QWidget(self.animal_widget)
+        self.animal_slider_widget3 = QWidget(self.music_vowels_widget)
         self.animal_slider_widget3.setObjectName(u"animal_slider_widget3")
         self.verticalLayout_10 = QVBoxLayout(self.animal_slider_widget3)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.animal_label3 = QLabel(self.animal_slider_widget3)
-        self.animal_label3.setObjectName(u"animal_label3")
-        self.animal_label3.setAlignment(Qt.AlignCenter)
+        self.vowel_label3 = QLabel(self.animal_slider_widget3)
+        self.vowel_label3.setObjectName(u"vowel_label3")
+        self.vowel_label3.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_10.addWidget(self.animal_label3)
+        self.verticalLayout_10.addWidget(self.vowel_label3)
 
-        self.animal_slider3 = QSlider(self.animal_slider_widget3)
-        self.animal_slider3.setObjectName(u"animal_slider3")
-        self.animal_slider3.setOrientation(Qt.Vertical)
+        self.vowel_slider3 = QSlider(self.animal_slider_widget3)
+        self.vowel_slider3.setObjectName(u"vowel_slider3")
+        self.vowel_slider3.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_10.addWidget(self.animal_slider3)
+        self.verticalLayout_10.addWidget(self.vowel_slider3)
 
 
         self.animal_layout.addWidget(self.animal_slider_widget3)
@@ -1204,7 +1203,7 @@ class Ui_MainWindow(object):
 
         self.animal_layout.addItem(self.horizontalSpacer_28)
 
-        self.line_8 = QFrame(self.animal_widget)
+        self.line_8 = QFrame(self.music_vowels_widget)
         self.line_8.setObjectName(u"line_8")
         self.line_8.setFrameShape(QFrame.Shape.VLine)
         self.line_8.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1215,21 +1214,21 @@ class Ui_MainWindow(object):
 
         self.animal_layout.addItem(self.horizontalSpacer_29)
 
-        self.animal_slider_widget4 = QWidget(self.animal_widget)
+        self.animal_slider_widget4 = QWidget(self.music_vowels_widget)
         self.animal_slider_widget4.setObjectName(u"animal_slider_widget4")
         self.verticalLayout_11 = QVBoxLayout(self.animal_slider_widget4)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.animal_label4 = QLabel(self.animal_slider_widget4)
-        self.animal_label4.setObjectName(u"animal_label4")
-        self.animal_label4.setAlignment(Qt.AlignCenter)
+        self.vowel_label4 = QLabel(self.animal_slider_widget4)
+        self.vowel_label4.setObjectName(u"vowel_label4")
+        self.vowel_label4.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_11.addWidget(self.animal_label4)
+        self.verticalLayout_11.addWidget(self.vowel_label4)
 
-        self.animal_slider4 = QSlider(self.animal_slider_widget4)
-        self.animal_slider4.setObjectName(u"animal_slider4")
-        self.animal_slider4.setOrientation(Qt.Vertical)
+        self.vowel_slider4 = QSlider(self.animal_slider_widget4)
+        self.vowel_slider4.setObjectName(u"vowel_slider4")
+        self.vowel_slider4.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_11.addWidget(self.animal_slider4)
+        self.verticalLayout_11.addWidget(self.vowel_slider4)
 
 
         self.animal_layout.addWidget(self.animal_slider_widget4)
@@ -1239,11 +1238,11 @@ class Ui_MainWindow(object):
         self.animal_layout.addItem(self.horizontalSpacer_30)
 
 
-        self.verticalLayout_20.addWidget(self.animal_widget)
+        self.verticalLayout_20.addWidget(self.music_vowels_widget)
 
-        self.music_widget = QWidget(self.sliders_widget)
-        self.music_widget.setObjectName(u"music_widget")
-        self.music_layout = QHBoxLayout(self.music_widget)
+        self.music_animals_widget = QWidget(self.sliders_widget)
+        self.music_animals_widget.setObjectName(u"music_animals_widget")
+        self.music_layout = QHBoxLayout(self.music_animals_widget)
         self.music_layout.setSpacing(0)
         self.music_layout.setObjectName(u"music_layout")
         self.music_layout.setContentsMargins(0, 0, 0, 0)
@@ -1251,21 +1250,21 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_31)
 
-        self.music_slider_widget1 = QWidget(self.music_widget)
+        self.music_slider_widget1 = QWidget(self.music_animals_widget)
         self.music_slider_widget1.setObjectName(u"music_slider_widget1")
         self.verticalLayout_12 = QVBoxLayout(self.music_slider_widget1)
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
-        self.music_label1 = QLabel(self.music_slider_widget1)
-        self.music_label1.setObjectName(u"music_label1")
-        self.music_label1.setAlignment(Qt.AlignCenter)
+        self.music_animals_label1 = QLabel(self.music_slider_widget1)
+        self.music_animals_label1.setObjectName(u"music_animals_label1")
+        self.music_animals_label1.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_12.addWidget(self.music_label1)
+        self.verticalLayout_12.addWidget(self.music_animals_label1)
 
-        self.music_slider1 = QSlider(self.music_slider_widget1)
-        self.music_slider1.setObjectName(u"music_slider1")
-        self.music_slider1.setOrientation(Qt.Vertical)
+        self.music_animals_slider1 = QSlider(self.music_slider_widget1)
+        self.music_animals_slider1.setObjectName(u"music_animals_slider1")
+        self.music_animals_slider1.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_12.addWidget(self.music_slider1)
+        self.verticalLayout_12.addWidget(self.music_animals_slider1)
 
 
         self.music_layout.addWidget(self.music_slider_widget1)
@@ -1274,7 +1273,7 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_32)
 
-        self.line_9 = QFrame(self.music_widget)
+        self.line_9 = QFrame(self.music_animals_widget)
         self.line_9.setObjectName(u"line_9")
         self.line_9.setFrameShape(QFrame.Shape.VLine)
         self.line_9.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1285,21 +1284,21 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_33)
 
-        self.music_slider_widget2 = QWidget(self.music_widget)
+        self.music_slider_widget2 = QWidget(self.music_animals_widget)
         self.music_slider_widget2.setObjectName(u"music_slider_widget2")
         self.verticalLayout_13 = QVBoxLayout(self.music_slider_widget2)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.music_label2 = QLabel(self.music_slider_widget2)
-        self.music_label2.setObjectName(u"music_label2")
-        self.music_label2.setAlignment(Qt.AlignCenter)
+        self.music_animals_label2 = QLabel(self.music_slider_widget2)
+        self.music_animals_label2.setObjectName(u"music_animals_label2")
+        self.music_animals_label2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_13.addWidget(self.music_label2)
+        self.verticalLayout_13.addWidget(self.music_animals_label2)
 
-        self.music_slider2 = QSlider(self.music_slider_widget2)
-        self.music_slider2.setObjectName(u"music_slider2")
-        self.music_slider2.setOrientation(Qt.Vertical)
+        self.music_animals_slider2 = QSlider(self.music_slider_widget2)
+        self.music_animals_slider2.setObjectName(u"music_animals_slider2")
+        self.music_animals_slider2.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_13.addWidget(self.music_slider2)
+        self.verticalLayout_13.addWidget(self.music_animals_slider2)
 
 
         self.music_layout.addWidget(self.music_slider_widget2)
@@ -1308,7 +1307,7 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_34)
 
-        self.line_10 = QFrame(self.music_widget)
+        self.line_10 = QFrame(self.music_animals_widget)
         self.line_10.setObjectName(u"line_10")
         self.line_10.setFrameShape(QFrame.Shape.VLine)
         self.line_10.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1319,21 +1318,21 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_35)
 
-        self.music_slider_widget3 = QWidget(self.music_widget)
+        self.music_slider_widget3 = QWidget(self.music_animals_widget)
         self.music_slider_widget3.setObjectName(u"music_slider_widget3")
         self.verticalLayout_14 = QVBoxLayout(self.music_slider_widget3)
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
-        self.music_label3 = QLabel(self.music_slider_widget3)
-        self.music_label3.setObjectName(u"music_label3")
-        self.music_label3.setAlignment(Qt.AlignCenter)
+        self.music_animals_label3 = QLabel(self.music_slider_widget3)
+        self.music_animals_label3.setObjectName(u"music_animals_label3")
+        self.music_animals_label3.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_14.addWidget(self.music_label3)
+        self.verticalLayout_14.addWidget(self.music_animals_label3)
 
-        self.music_slider3 = QSlider(self.music_slider_widget3)
-        self.music_slider3.setObjectName(u"music_slider3")
-        self.music_slider3.setOrientation(Qt.Vertical)
+        self.music_animals_slider3 = QSlider(self.music_slider_widget3)
+        self.music_animals_slider3.setObjectName(u"music_animals_slider3")
+        self.music_animals_slider3.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_14.addWidget(self.music_slider3)
+        self.verticalLayout_14.addWidget(self.music_animals_slider3)
 
 
         self.music_layout.addWidget(self.music_slider_widget3)
@@ -1342,7 +1341,7 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_36)
 
-        self.line_11 = QFrame(self.music_widget)
+        self.line_11 = QFrame(self.music_animals_widget)
         self.line_11.setObjectName(u"line_11")
         self.line_11.setFrameShape(QFrame.Shape.VLine)
         self.line_11.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1353,21 +1352,21 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_37)
 
-        self.music_slider_widget4 = QWidget(self.music_widget)
+        self.music_slider_widget4 = QWidget(self.music_animals_widget)
         self.music_slider_widget4.setObjectName(u"music_slider_widget4")
         self.verticalLayout_15 = QVBoxLayout(self.music_slider_widget4)
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
-        self.music_label4 = QLabel(self.music_slider_widget4)
-        self.music_label4.setObjectName(u"music_label4")
-        self.music_label4.setAlignment(Qt.AlignCenter)
+        self.music_animals_label4 = QLabel(self.music_slider_widget4)
+        self.music_animals_label4.setObjectName(u"music_animals_label4")
+        self.music_animals_label4.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_15.addWidget(self.music_label4)
+        self.verticalLayout_15.addWidget(self.music_animals_label4)
 
-        self.music_slider4 = QSlider(self.music_slider_widget4)
-        self.music_slider4.setObjectName(u"music_slider4")
-        self.music_slider4.setOrientation(Qt.Vertical)
+        self.music_animals_slider4 = QSlider(self.music_slider_widget4)
+        self.music_animals_slider4.setObjectName(u"music_animals_slider4")
+        self.music_animals_slider4.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_15.addWidget(self.music_slider4)
+        self.verticalLayout_15.addWidget(self.music_animals_slider4)
 
 
         self.music_layout.addWidget(self.music_slider_widget4)
@@ -1376,152 +1375,82 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_38)
 
-
-        self.verticalLayout_20.addWidget(self.music_widget)
-
-        self.ECG_widget = QWidget(self.sliders_widget)
-        self.ECG_widget.setObjectName(u"ECG_widget")
-        self.ECG_layout = QHBoxLayout(self.ECG_widget)
-        self.ECG_layout.setSpacing(0)
-        self.ECG_layout.setObjectName(u"ECG_layout")
-        self.ECG_layout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer_39 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.ECG_layout.addItem(self.horizontalSpacer_39)
-
-        self.ECG_slider_widget1 = QWidget(self.ECG_widget)
-        self.ECG_slider_widget1.setObjectName(u"ECG_slider_widget1")
-        self.verticalLayout_16 = QVBoxLayout(self.ECG_slider_widget1)
-        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
-        self.ECG_label1 = QLabel(self.ECG_slider_widget1)
-        self.ECG_label1.setObjectName(u"ECG_label1")
-        self.ECG_label1.setAlignment(Qt.AlignCenter)
-
-        self.verticalLayout_16.addWidget(self.ECG_label1)
-
-        self.ECG_slider1 = QSlider(self.ECG_slider_widget1)
-        self.ECG_slider1.setObjectName(u"ECG_slider1")
-        self.ECG_slider1.setOrientation(Qt.Vertical)
-
-        self.verticalLayout_16.addWidget(self.ECG_slider1)
-
-
-        self.ECG_layout.addWidget(self.ECG_slider_widget1)
-
-        self.horizontalSpacer_40 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.ECG_layout.addItem(self.horizontalSpacer_40)
-
-        self.line_12 = QFrame(self.ECG_widget)
+        self.line_12 = QFrame(self.music_animals_widget)
         self.line_12.setObjectName(u"line_12")
         self.line_12.setFrameShape(QFrame.Shape.VLine)
         self.line_12.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.ECG_layout.addWidget(self.line_12)
+        self.music_layout.addWidget(self.line_12)
 
-        self.horizontalSpacer_41 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_39 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.ECG_layout.addItem(self.horizontalSpacer_41)
+        self.music_layout.addItem(self.horizontalSpacer_39)
 
-        self.ECG_slider_widget2 = QWidget(self.ECG_widget)
-        self.ECG_slider_widget2.setObjectName(u"ECG_slider_widget2")
-        self.verticalLayout_17 = QVBoxLayout(self.ECG_slider_widget2)
-        self.verticalLayout_17.setObjectName(u"verticalLayout_17")
-        self.ECG_label2 = QLabel(self.ECG_slider_widget2)
-        self.ECG_label2.setObjectName(u"ECG_label2")
-        self.ECG_label2.setAlignment(Qt.AlignCenter)
+        self.verticalWidget = QWidget(self.music_animals_widget)
+        self.verticalWidget.setObjectName(u"verticalWidget")
+        self.verticalWidget.setMinimumSize(QSize(0, 0))
+        self.verticalLayout_8 = QVBoxLayout(self.verticalWidget)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.music_animals_label5 = QLabel(self.verticalWidget)
+        self.music_animals_label5.setObjectName(u"music_animals_label5")
 
-        self.verticalLayout_17.addWidget(self.ECG_label2)
+        self.verticalLayout_8.addWidget(self.music_animals_label5)
 
-        self.ECG_slider2 = QSlider(self.ECG_slider_widget2)
-        self.ECG_slider2.setObjectName(u"ECG_slider2")
-        self.ECG_slider2.setOrientation(Qt.Vertical)
+        self.music_animals_slider5 = QSlider(self.verticalWidget)
+        self.music_animals_slider5.setObjectName(u"music_animals_slider5")
+        self.music_animals_slider5.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_17.addWidget(self.ECG_slider2)
+        self.verticalLayout_8.addWidget(self.music_animals_slider5)
 
 
-        self.ECG_layout.addWidget(self.ECG_slider_widget2)
+        self.music_layout.addWidget(self.verticalWidget)
 
-        self.horizontalSpacer_42 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_40 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.ECG_layout.addItem(self.horizontalSpacer_42)
+        self.music_layout.addItem(self.horizontalSpacer_40)
 
-        self.line_13 = QFrame(self.ECG_widget)
+        self.line_13 = QFrame(self.music_animals_widget)
         self.line_13.setObjectName(u"line_13")
         self.line_13.setFrameShape(QFrame.Shape.VLine)
         self.line_13.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.ECG_layout.addWidget(self.line_13)
+        self.music_layout.addWidget(self.line_13)
 
-        self.horizontalSpacer_43 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_41 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.ECG_layout.addItem(self.horizontalSpacer_43)
+        self.music_layout.addItem(self.horizontalSpacer_41)
 
-        self.ECG_slider_widget3 = QWidget(self.ECG_widget)
-        self.ECG_slider_widget3.setObjectName(u"ECG_slider_widget3")
-        self.verticalLayout_18 = QVBoxLayout(self.ECG_slider_widget3)
-        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
-        self.ECG_label3 = QLabel(self.ECG_slider_widget3)
-        self.ECG_label3.setObjectName(u"ECG_label3")
-        self.ECG_label3.setAlignment(Qt.AlignCenter)
+        self.verticalWidget1 = QWidget(self.music_animals_widget)
+        self.verticalWidget1.setObjectName(u"verticalWidget1")
+        self.verticalWidget1.setMinimumSize(QSize(33, 0))
+        self.verticalLayout_16 = QVBoxLayout(self.verticalWidget1)
+        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
+        self.music_animals_label6 = QLabel(self.verticalWidget1)
+        self.music_animals_label6.setObjectName(u"music_animals_label6")
 
-        self.verticalLayout_18.addWidget(self.ECG_label3)
+        self.verticalLayout_16.addWidget(self.music_animals_label6)
 
-        self.ECG_slider3 = QSlider(self.ECG_slider_widget3)
-        self.ECG_slider3.setObjectName(u"ECG_slider3")
-        self.ECG_slider3.setOrientation(Qt.Vertical)
+        self.music_animals_slider6 = QSlider(self.verticalWidget1)
+        self.music_animals_slider6.setObjectName(u"music_animals_slider6")
+        self.music_animals_slider6.setOrientation(Qt.Orientation.Vertical)
 
-        self.verticalLayout_18.addWidget(self.ECG_slider3)
-
-
-        self.ECG_layout.addWidget(self.ECG_slider_widget3)
-
-        self.horizontalSpacer_44 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.ECG_layout.addItem(self.horizontalSpacer_44)
-
-        self.line_14 = QFrame(self.ECG_widget)
-        self.line_14.setObjectName(u"line_14")
-        self.line_14.setFrameShape(QFrame.Shape.VLine)
-        self.line_14.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.ECG_layout.addWidget(self.line_14)
-
-        self.horizontalSpacer_45 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.ECG_layout.addItem(self.horizontalSpacer_45)
-
-        self.ECG_slider_widget4 = QWidget(self.ECG_widget)
-        self.ECG_slider_widget4.setObjectName(u"ECG_slider_widget4")
-        self.verticalLayout_19 = QVBoxLayout(self.ECG_slider_widget4)
-        self.verticalLayout_19.setObjectName(u"verticalLayout_19")
-        self.ECG_label4 = QLabel(self.ECG_slider_widget4)
-        self.ECG_label4.setObjectName(u"ECG_label4")
-        self.ECG_label4.setAlignment(Qt.AlignCenter)
-
-        self.verticalLayout_19.addWidget(self.ECG_label4)
-
-        self.ECG_slider4 = QSlider(self.ECG_slider_widget4)
-        self.ECG_slider4.setObjectName(u"ECG_slider4")
-        self.ECG_slider4.setOrientation(Qt.Vertical)
-
-        self.verticalLayout_19.addWidget(self.ECG_slider4)
+        self.verticalLayout_16.addWidget(self.music_animals_slider6)
 
 
-        self.ECG_layout.addWidget(self.ECG_slider_widget4)
+        self.music_layout.addWidget(self.verticalWidget1)
 
-        self.horizontalSpacer_46 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_42 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.ECG_layout.addItem(self.horizontalSpacer_46)
+        self.music_layout.addItem(self.horizontalSpacer_42)
 
 
-        self.verticalLayout_20.addWidget(self.ECG_widget)
+        self.verticalLayout_20.addWidget(self.music_animals_widget)
 
         self.spectrogram_checkbox = QCheckBox(self.sliders_widget)
         self.spectrogram_checkbox.setObjectName(u"spectrogram_checkbox")
         self.spectrogram_checkbox.setMaximumSize(QSize(150, 16777215))
 
-        self.horizontalLayout_3.addWidget(self.spectrogram_checkbox)
+        self.verticalLayout_20.addWidget(self.spectrogram_checkbox)
 
 
         self.horizontalLayout_10.addWidget(self.sliders_widget)
@@ -1532,7 +1461,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1183, 33))
+        self.menubar.setGeometry(QRect(0, 0, 1183, 29))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -1573,18 +1502,16 @@ class Ui_MainWindow(object):
         self.uniform_label8.setText(QCoreApplication.translate("MainWindow", u"8", None))
         self.uniform_label9.setText(QCoreApplication.translate("MainWindow", u"9", None))
         self.uniform_label10.setText(QCoreApplication.translate("MainWindow", u"10", None))
-        self.animal_label1.setText(QCoreApplication.translate("MainWindow", u"1", None))
-        self.animal_label2.setText(QCoreApplication.translate("MainWindow", u"2", None))
-        self.animal_label3.setText(QCoreApplication.translate("MainWindow", u"3", None))
-        self.animal_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
-        self.music_label1.setText(QCoreApplication.translate("MainWindow", u"1", None))
-        self.music_label2.setText(QCoreApplication.translate("MainWindow", u"2", None))
-        self.music_label3.setText(QCoreApplication.translate("MainWindow", u"3", None))
-        self.music_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
-        self.ECG_label1.setText(QCoreApplication.translate("MainWindow", u"1", None))
-        self.ECG_label2.setText(QCoreApplication.translate("MainWindow", u"2", None))
-        self.ECG_label3.setText(QCoreApplication.translate("MainWindow", u"3", None))
-        self.ECG_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
+        self.vowel_label1.setText(QCoreApplication.translate("MainWindow", u"1", None))
+        self.vowel_label2.setText(QCoreApplication.translate("MainWindow", u"2", None))
+        self.vowel_label3.setText(QCoreApplication.translate("MainWindow", u"3", None))
+        self.vowel_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
+        self.music_animals_label1.setText(QCoreApplication.translate("MainWindow", u"1", None))
+        self.music_animals_label2.setText(QCoreApplication.translate("MainWindow", u"2", None))
+        self.music_animals_label3.setText(QCoreApplication.translate("MainWindow", u"3", None))
+        self.music_animals_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
+        self.music_animals_label5.setText(QCoreApplication.translate("MainWindow", u"5", None))
+        self.music_animals_label6.setText(QCoreApplication.translate("MainWindow", u"6", None))
         self.spectrogram_checkbox.setText(QCoreApplication.translate("MainWindow", u"Show spectrogram", None))
     # retranslateUi
 

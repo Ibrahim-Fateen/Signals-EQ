@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
             "Drum": [(0, 300)]
         }
 
-        self.animal_mode_frequencies = {
+        self.music_animal_mode_frequencies = {
             "Dog": [(100, 500)],
             "Cow": [(500, 1200)],
             "Donkey": [(1000, 2500)],
@@ -53,15 +53,16 @@ class MainWindow(QMainWindow):
         }
 
         self.sliders = {
-            self.ui.animal_slider1: "Violin",
-            self.ui.animal_slider2: "Drum",
-            self.ui.animal_slider3: "A",
-            self.ui.animal_slider4: "UH",
-            self.ui.music_slider1: "Oud",
-            self.ui.music_slider2: "Nay",
-            self.ui.music_slider3: "Violin",
-            self.ui.music_slider4: "Drums",
-            self.ui.ECG_slider1: "Normal",
+            self.ui.vowel_slider1: "Violin",
+            self.ui.vowel_slider2: "Drum",
+            self.ui.vowel_slider3: "A",
+            self.ui.vowel_slider4: "UH",
+            self.ui.music_animals_slider1: "Dog",
+            self.ui.music_animals_slider2: "Cow",
+            self.ui.music_animals_slider3: "Donkey",
+            self.ui.music_animals_slider4: "Claps",
+            self.ui.music_animals_slider5: "Oud",
+            self.ui.music_animals_slider6: "Nay",
             self.ui.uniform_slider1: "Uniform 1",
             self.ui.uniform_slider2: "Uniform 2",
             self.ui.uniform_slider3: "Uniform 3",
@@ -127,15 +128,17 @@ class MainWindow(QMainWindow):
 
             slider.setValue(slider.maximum() // 2)
 
-        self.ui.animal_label1.setText("Violin")
-        self.ui.animal_label2.setText("Drum")
-        self.ui.animal_label3.setText("A")
-        self.ui.animal_label4.setText("UH")
+        self.ui.vowel_label1.setText("Violin")
+        self.ui.vowel_label2.setText("Drum")
+        self.ui.vowel_label3.setText("A")
+        self.ui.vowel_label4.setText("UH")
 
-        self.ui.music_label1.setText("Oud")
-        self.ui.music_label2.setText("Nay")
-        self.ui.music_label3.setText("Violin")
-        self.ui.music_label4.setText("Drums")
+        self.ui.music_animals_label1.setText("Dog")
+        self.ui.music_animals_label2.setText("Cow")
+        self.ui.music_animals_label3.setText("Donkey")
+        self.ui.music_animals_label4.setText("Claps")
+        self.ui.music_animals_label5.setText("Oud")
+        self.ui.music_animals_label6.setText("Nay")
 
         self.ui.uniform_label1.setText("Uniform 1")
         self.ui.uniform_label2.setText("Uniform 2")
@@ -212,20 +215,18 @@ class MainWindow(QMainWindow):
 
     def show_selected_layout(self, index):
         # Hide all layouts
-        self.show_hide_widget(self.ui.animal_widget, False)
-        self.show_hide_widget(self.ui.music_widget, False)
-        self.show_hide_widget(self.ui.ECG_widget, False)
+        self.show_hide_widget(self.ui.music_animals_widget, False)
+        self.show_hide_widget(self.ui.music_vowels_widget, False)
         self.show_hide_widget(self.ui.uniform_widget, False)
 
         # Show the selected layout
         if index == 0:
-            self.show_hide_widget(self.ui.animal_widget, True)
+            self.show_hide_widget(self.ui.music_vowels_widget, True)
             self.current_mode = Mode.MUSIC_AND_VOWELS
         elif index == 1:
-            self.show_hide_widget(self.ui.music_widget, True)
+            self.show_hide_widget(self.ui.music_animals_widget, True)
             self.current_mode = Mode.MUSIC_AND_ANIMALS
         elif index == 2:
-            self.show_hide_widget(self.ui.ECG_widget, True)
             self.current_mode = Mode.WIENER_FILTER
         elif index == 3:
             self.show_hide_widget(self.ui.uniform_widget, True)
@@ -333,7 +334,7 @@ class MainWindow(QMainWindow):
             if self.current_mode == Mode.MUSIC_AND_VOWELS:
                 frequency_ranges = self.vowels_mode_frequencies
             else:
-                frequency_ranges = self.animal_mode_frequencies
+                frequency_ranges = self.music_animal_mode_frequencies
 
             self.signal.equalize(slider_values, frequency_ranges)
 
@@ -353,9 +354,9 @@ class MainWindow(QMainWindow):
         if self.current_mode == Mode.UNIFORM:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("uniform")]
         elif self.current_mode == Mode.MUSIC_AND_VOWELS:
-            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("animal")]
+            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("vowel")]
         elif self.current_mode == Mode.MUSIC_AND_ANIMALS:
-            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("music")]
+            relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("music_animals")]
         else:
             return
 
