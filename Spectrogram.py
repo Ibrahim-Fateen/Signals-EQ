@@ -8,6 +8,7 @@ from matplotlib.figure import Figure
 class SpectrogramWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setMinimumHeight(230)
         self.canvas = FigureCanvas(Figure(figsize=(1, 0.5)))
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)

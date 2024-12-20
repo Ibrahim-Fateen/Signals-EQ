@@ -510,7 +510,7 @@ QListWidget {
         <widget class="QComboBox" name="modes_combo">
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>250</width>
            <height>25</height>
           </size>
          </property>
@@ -528,6 +528,19 @@ QListWidget {
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="spectrogram_checkbox">
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Show spectrogram</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -630,6 +643,12 @@ QListWidget {
          </property>
          <item>
           <widget class="QWidget" name="spectro1_widget" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <layout class="QVBoxLayout" name="verticalLayout_30">
             <property name="spacing">
              <number>0</number>
@@ -2149,19 +2168,6 @@ QListWidget {
               </spacer>
              </item>
             </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="spectrogram_checkbox">
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Show spectrogram</string>
-            </property>
            </widget>
           </item>
          </layout>

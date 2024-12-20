@@ -490,13 +490,19 @@ class Ui_MainWindow(object):
 
         self.modes_combo = QComboBox(self.top_frame)
         self.modes_combo.setObjectName(u"modes_combo")
-        self.modes_combo.setMinimumSize(QSize(150, 25))
+        self.modes_combo.setMinimumSize(QSize(250, 25))
 
         self.horizontalLayout_3.addWidget(self.modes_combo)
 
         self.horizontalSpacer_top = QSpacerItem(864, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_top)
+
+        self.spectrogram_checkbox = QCheckBox(self.top_frame)
+        self.spectrogram_checkbox.setObjectName(u"spectrogram_checkbox")
+        self.spectrogram_checkbox.setMaximumSize(QSize(150, 16777215))
+
+        self.horizontalLayout_3.addWidget(self.spectrogram_checkbox)
 
 
         self.verticalLayout_28.addWidget(self.top_frame)
@@ -1446,12 +1452,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_20.addWidget(self.music_animals_widget)
 
-        self.spectrogram_checkbox = QCheckBox(self.sliders_widget)
-        self.spectrogram_checkbox.setObjectName(u"spectrogram_checkbox")
-        self.spectrogram_checkbox.setMaximumSize(QSize(150, 16777215))
-
-        self.verticalLayout_20.addWidget(self.spectrogram_checkbox)
-
 
         self.horizontalLayout_10.addWidget(self.sliders_widget)
 
@@ -1475,6 +1475,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.browse_btn.setText(QCoreApplication.translate("MainWindow", u"Browse", None))
+        self.spectrogram_checkbox.setText(QCoreApplication.translate("MainWindow", u"Show spectrogram", None))
         self.original_plot_label.setText(QCoreApplication.translate("MainWindow", u"Original plot", None))
         self.equalized_plot_label.setText(QCoreApplication.translate("MainWindow", u"Equalized plot", None))
         self.original_spectro_label.setText(QCoreApplication.translate("MainWindow", u"Original spectrogram", None))
@@ -1512,6 +1513,5 @@ class Ui_MainWindow(object):
         self.music_animals_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
         self.music_animals_label5.setText(QCoreApplication.translate("MainWindow", u"5", None))
         self.music_animals_label6.setText(QCoreApplication.translate("MainWindow", u"6", None))
-        self.spectrogram_checkbox.setText(QCoreApplication.translate("MainWindow", u"Show spectrogram", None))
     # retranslateUi
 
