@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QHBoxLayout, QLabel, QMainWindow, QMenuBar,
     QPushButton, QSizePolicy, QSlider, QSpacerItem,
-    QStatusBar, QVBoxLayout, QWidget)
+    QStatusBar, QTimeEdit, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -560,6 +560,7 @@ class Ui_MainWindow(object):
         self.spectrograph_layout.setObjectName(u"spectrograph_layout")
         self.spectro1_widget = QWidget(self.graphs_widget)
         self.spectro1_widget.setObjectName(u"spectro1_widget")
+        self.spectro1_widget.setMinimumSize(QSize(0, 0))
         self.verticalLayout_30 = QVBoxLayout(self.spectro1_widget)
         self.verticalLayout_30.setSpacing(0)
         self.verticalLayout_30.setObjectName(u"verticalLayout_30")
@@ -1452,6 +1453,92 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_20.addWidget(self.music_animals_widget)
 
+        self.wiener_filter_widget = QWidget(self.sliders_widget)
+        self.wiener_filter_widget.setObjectName(u"wiener_filter_widget")
+        self.wiener_filter_widget.setMinimumSize(QSize(0, 50))
+        self.horizontalLayout_7 = QHBoxLayout(self.wiener_filter_widget)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.silence_identifier_frame = QFrame(self.wiener_filter_widget)
+        self.silence_identifier_frame.setObjectName(u"silence_identifier_frame")
+        self.verticalLayout_18 = QVBoxLayout(self.silence_identifier_frame)
+        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_18.addItem(self.verticalSpacer)
+
+        self.identify_silence_btn = QPushButton(self.silence_identifier_frame)
+        self.identify_silence_btn.setObjectName(u"identify_silence_btn")
+
+        self.verticalLayout_18.addWidget(self.identify_silence_btn)
+
+        self.horizontalWidget = QWidget(self.silence_identifier_frame)
+        self.horizontalWidget.setObjectName(u"horizontalWidget")
+        self.horizontalWidget.setMinimumSize(QSize(0, 20))
+        self.horizontalLayout_8 = QHBoxLayout(self.horizontalWidget)
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.silence_start_label = QLabel(self.horizontalWidget)
+        self.silence_start_label.setObjectName(u"silence_start_label")
+        self.silence_start_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_8.addWidget(self.silence_start_label)
+
+        self.silence_start_time_edit = QTimeEdit(self.horizontalWidget)
+        self.silence_start_time_edit.setObjectName(u"silence_start_time_edit")
+
+        self.horizontalLayout_8.addWidget(self.silence_start_time_edit)
+
+        self.silence_stop_label = QLabel(self.horizontalWidget)
+        self.silence_stop_label.setObjectName(u"silence_stop_label")
+        self.silence_stop_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_8.addWidget(self.silence_stop_label)
+
+        self.silence_stop_time_edit = QTimeEdit(self.horizontalWidget)
+        self.silence_stop_time_edit.setObjectName(u"silence_stop_time_edit")
+
+        self.horizontalLayout_8.addWidget(self.silence_stop_time_edit)
+
+
+        self.verticalLayout_18.addWidget(self.horizontalWidget)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_18.addItem(self.verticalSpacer_2)
+
+
+        self.horizontalLayout_7.addWidget(self.silence_identifier_frame)
+
+        self.horizontalFrame = QFrame(self.wiener_filter_widget)
+        self.horizontalFrame.setObjectName(u"horizontalFrame")
+        self.horizontalLayout_9 = QHBoxLayout(self.horizontalFrame)
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.line_14 = QFrame(self.horizontalFrame)
+        self.line_14.setObjectName(u"line_14")
+        self.line_14.setFrameShape(QFrame.Shape.VLine)
+        self.line_14.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.horizontalLayout_9.addWidget(self.line_14)
+
+        self.horizontalSpacer_43 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_43)
+
+        self.apply_filter_btn = QPushButton(self.horizontalFrame)
+        self.apply_filter_btn.setObjectName(u"apply_filter_btn")
+        self.apply_filter_btn.setMinimumSize(QSize(255, 0))
+
+        self.horizontalLayout_9.addWidget(self.apply_filter_btn)
+
+        self.horizontalSpacer_44 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_44)
+
+
+        self.horizontalLayout_7.addWidget(self.horizontalFrame)
+
+
+        self.verticalLayout_20.addWidget(self.wiener_filter_widget)
+
 
         self.horizontalLayout_10.addWidget(self.sliders_widget)
 
@@ -1513,5 +1600,11 @@ class Ui_MainWindow(object):
         self.music_animals_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
         self.music_animals_label5.setText(QCoreApplication.translate("MainWindow", u"5", None))
         self.music_animals_label6.setText(QCoreApplication.translate("MainWindow", u"6", None))
+        self.identify_silence_btn.setText(QCoreApplication.translate("MainWindow", u"Identify Silence", None))
+        self.silence_start_label.setText(QCoreApplication.translate("MainWindow", u"From:", None))
+        self.silence_start_time_edit.setDisplayFormat(QCoreApplication.translate("MainWindow", u"mm:ss.z", None))
+        self.silence_stop_label.setText(QCoreApplication.translate("MainWindow", u"To:", None))
+        self.silence_stop_time_edit.setDisplayFormat(QCoreApplication.translate("MainWindow", u"mm:ss.z", None))
+        self.apply_filter_btn.setText(QCoreApplication.translate("MainWindow", u"Apply Wiener Filiter", None))
     # retranslateUi
 

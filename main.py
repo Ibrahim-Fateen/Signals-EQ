@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QErrorMessage, QPushButton, QWidget, QSlider, \
-    QHBoxLayout, QVBoxLayout, QLabel
-from PySide6.QtCore import QSize, Qt
+    QHBoxLayout, QVBoxLayout, QLabel, QDialog
+from PySide6.QtCore import QSize, Qt, QTime
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QCheckBox
 import sys
@@ -16,6 +16,7 @@ import tempfile
 import os
 from scipy.io.wavfile import write
 from FrequencyGraph import FrequencyGraph
+from SilenceSelector import SilenceSelector
 
 
 class Mode(Enum):
@@ -173,7 +174,7 @@ class MainWindow(QMainWindow):
         # Add layouts to the combo box
         self.ui.modes_combo.addItem("Instruments and Vowels")
         self.ui.modes_combo.addItem("Instruments and Animals")
-        self.ui.modes_combo.addItem("Weiner Filter")
+        self.ui.modes_combo.addItem("Wiener Filter")
         self.ui.modes_combo.addItem("Uniform")
 
         # Connect combo box selection change to a function
@@ -202,6 +203,9 @@ class MainWindow(QMainWindow):
         self.frequency_graph = FrequencyGraph()
         self.setup_fourier_graph()
 
+        self.ui.identify_silence_btn.clicked.connect(self.identify_silence)
+        self.ui.apply_filter_btn.clicked.connect(self.update_signal)
+
     def setup_fourier_graph(self):
         self.fourier_checkbox = QCheckBox("Show Fourier Transform")
         self.fourier_checkbox.setMaximumWidth(200)
@@ -217,6 +221,7 @@ class MainWindow(QMainWindow):
         # Hide all layouts
         self.show_hide_widget(self.ui.music_animals_widget, False)
         self.show_hide_widget(self.ui.music_vowels_widget, False)
+        self.show_hide_widget(self.ui.wiener_filter_widget, False)
         self.show_hide_widget(self.ui.uniform_widget, False)
 
         # Show the selected layout
@@ -227,6 +232,7 @@ class MainWindow(QMainWindow):
             self.show_hide_widget(self.ui.music_animals_widget, True)
             self.current_mode = Mode.MUSIC_AND_ANIMALS
         elif index == 2:
+            self.show_hide_widget(self.ui.wiener_filter_widget, True)
             self.current_mode = Mode.WIENER_FILTER
         elif index == 3:
             self.show_hide_widget(self.ui.uniform_widget, True)
@@ -324,19 +330,20 @@ class MainWindow(QMainWindow):
         if self.signal.original_data is None:
             return
 
-        slider_values = self.get_slider_values()
-
-        if self.current_mode == Mode.UNIFORM:
-            self.signal.equalize_uniform(slider_values)
-        elif self.current_mode == Mode.WIENER_FILTER:
-            pass
+        if self.current_mode == Mode.WIENER_FILTER:
+            silence_start, silence_stop = self.get_silence_period()
+            self.signal.apply_wiener_filter(silence_start, silence_stop)
         else:
-            if self.current_mode == Mode.MUSIC_AND_VOWELS:
-                frequency_ranges = self.vowels_mode_frequencies
+            slider_values = self.get_slider_values()
+            if self.current_mode == Mode.UNIFORM:
+                self.signal.equalize_uniform(slider_values)
             else:
-                frequency_ranges = self.music_animal_mode_frequencies
+                if self.current_mode == Mode.MUSIC_AND_VOWELS:
+                    frequency_ranges = self.vowels_mode_frequencies
+                else:
+                    frequency_ranges = self.music_animal_mode_frequencies
 
-            self.signal.equalize(slider_values, frequency_ranges)
+                self.signal.equalize(slider_values, frequency_ranges)
 
         self.update_spectrogram()
         if self.modified_audio_path:
@@ -357,10 +364,21 @@ class MainWindow(QMainWindow):
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("vowel")]
         elif self.current_mode == Mode.MUSIC_AND_ANIMALS:
             relevant_sliders = [slider for slider in relevant_sliders if slider.objectName().startswith("music_animals")]
-        else:
-            return
 
         return {sound: -50 + slider.value() for slider, sound in self.sliders.items() if slider in relevant_sliders}
+
+    def get_silence_period(self):
+        start_time = self.ui.silence_start_time_edit.time().msecsSinceStartOfDay()
+        stop_time = self.ui.silence_stop_time_edit.time().msecsSinceStartOfDay()
+        return start_time, stop_time
+
+    def identify_silence(self):
+        dialog = SilenceSelector(self.signal, self)
+        if dialog.exec() == QDialog.Accepted:
+            start_time, end_time = dialog.get_selection()
+            self.ui.silence_start_time_edit.setTime(QTime(0, 0, 0).addMSecs(start_time))
+            self.ui.silence_stop_time_edit.setTime(QTime(0, 0, 0).addMSecs(end_time))
+            # self.update_signal()
 
     def connect_graph_controls(self):
         #zooming and panning for both graphs
