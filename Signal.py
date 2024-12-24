@@ -48,7 +48,6 @@ class Signal(DynamicSignal):
         # Apply the combined gain to the spectrum
         self.modified_spectrum = self.original_spectrum * gain_array
         self.modified = True
-        # self.get_modified_data()
 
     def equalize_uniform(self, slider_values):
         """
@@ -64,6 +63,31 @@ class Signal(DynamicSignal):
         slider_width = maximum_frequency / num_sliders
         frequency_ranges = [(i * slider_width, (i + 1) * slider_width) for i in range(num_sliders)]
         self.equalize(slider_values, {f"Uniform {i + 1}": freq_range for i, freq_range in enumerate(frequency_ranges)})
+
+    def apply_wiener_filter(self, silence_start_time, silence_stop_time):
+        """
+        :param silence_start_time: ms from start of the file
+        :param silence_stop_time: ms from start of the file
+        :return:
+        """
+        start_index = int(silence_start_time * self.sample_rate / 1000)
+        stop_index = int(silence_stop_time * self.sample_rate / 1000)
+
+        noise_segment = self.original_data[start_index:stop_index]
+        window = np.hanning(len(noise_segment))
+        windowed_noise = noise_segment * window
+
+        noise_ft = np.fft.fft(windowed_noise, len(self.original_data))
+        psd_noisy_signal = np.abs(self.original_spectrum) ** 2
+        psd_noise = np.abs(noise_ft) ** 2
+
+        normalized_psd_noise = 100 * psd_noise / np.max(psd_noise)
+        normalize_psd_noisy_signal = 100 * psd_noisy_signal / np.max(psd_noisy_signal)
+
+        wiener_filter_transfer_function = 1 - normalized_psd_noise / normalize_psd_noisy_signal
+        wiener_filter_transfer_function = np.maximum(wiener_filter_transfer_function, 0)
+
+        self.modified_spectrum = self.original_spectrum * wiener_filter_transfer_function
         self.modified = True
 
     def get_modified_data(self):
