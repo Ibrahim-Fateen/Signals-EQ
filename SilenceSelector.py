@@ -16,7 +16,7 @@ class SilenceSelector(QDialog):
         if self.signal.sample_rate is None:
             self.signal.sample_rate = 44100
 
-        self.setWindowTitle("Select Silence Region")
+        self.setWindowTitle("Select Region of Silence")
         self.resize(800, 400)
 
         layout = QVBoxLayout(self)

@@ -45,12 +45,14 @@ class MainWindow(QMainWindow):
         }
 
         self.music_animal_mode_frequencies = {
-            "Dog": [(100, 500)],
-            "Cow": [(500, 1200)],
-            "Donkey": [(1000, 2500)],
-            "Claps": [(2000, 8000)],
-            "Oud": [(140, 300)],
-            "Nay": [(450, 8000)],
+            "Cat": [
+                (550, 660), (1100, 1300), (1750, 2000), (2300, 2600), (2900, 3200), (3400, 3850), (4050, 4400),
+                (4600, 5100), (5200, 5800)
+            ],
+            "Whale": [(0, 300)],
+            "Owl": [(310, 420)],
+            "Trumpet": [(160, 350), (400, 460), (550, 600), (800, 900), (1050, 1150)],
+            "Oboe": [(950, 1200), (1300, 1400)],
         }
 
         self.sliders = {
@@ -58,12 +60,11 @@ class MainWindow(QMainWindow):
             self.ui.vowel_slider2: "Drum",
             self.ui.vowel_slider3: "A",
             self.ui.vowel_slider4: "UH",
-            self.ui.music_animals_slider1: "Dog",
-            self.ui.music_animals_slider2: "Cow",
-            self.ui.music_animals_slider3: "Donkey",
-            self.ui.music_animals_slider4: "Claps",
-            self.ui.music_animals_slider5: "Oud",
-            self.ui.music_animals_slider6: "Nay",
+            self.ui.music_animals_slider1: "Trumpet",
+            self.ui.music_animals_slider2: "Oboe",
+            self.ui.music_animals_slider3: "Cat",
+            self.ui.music_animals_slider4: "Owl",
+            self.ui.music_animals_slider5: "Whale",
             self.ui.uniform_slider1: "Uniform 1",
             self.ui.uniform_slider2: "Uniform 2",
             self.ui.uniform_slider3: "Uniform 3",
@@ -134,12 +135,11 @@ class MainWindow(QMainWindow):
         self.ui.vowel_label3.setText("A")
         self.ui.vowel_label4.setText("UH")
 
-        self.ui.music_animals_label1.setText("Dog")
-        self.ui.music_animals_label2.setText("Cow")
-        self.ui.music_animals_label3.setText("Donkey")
-        self.ui.music_animals_label4.setText("Claps")
-        self.ui.music_animals_label5.setText("Oud")
-        self.ui.music_animals_label6.setText("Nay")
+        self.ui.music_animals_label1.setText("Trumpet")
+        self.ui.music_animals_label2.setText("Oboe")
+        self.ui.music_animals_label3.setText("Cat")
+        self.ui.music_animals_label4.setText("Owl")
+        self.ui.music_animals_label5.setText("Whale")
 
         self.ui.uniform_label1.setText("Uniform 1")
         self.ui.uniform_label2.setText("Uniform 2")

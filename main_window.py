@@ -1416,40 +1416,6 @@ class Ui_MainWindow(object):
 
         self.music_layout.addItem(self.horizontalSpacer_40)
 
-        self.line_13 = QFrame(self.music_animals_widget)
-        self.line_13.setObjectName(u"line_13")
-        self.line_13.setFrameShape(QFrame.Shape.VLine)
-        self.line_13.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.music_layout.addWidget(self.line_13)
-
-        self.horizontalSpacer_41 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.music_layout.addItem(self.horizontalSpacer_41)
-
-        self.verticalWidget1 = QWidget(self.music_animals_widget)
-        self.verticalWidget1.setObjectName(u"verticalWidget1")
-        self.verticalWidget1.setMinimumSize(QSize(33, 0))
-        self.verticalLayout_16 = QVBoxLayout(self.verticalWidget1)
-        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
-        self.music_animals_label6 = QLabel(self.verticalWidget1)
-        self.music_animals_label6.setObjectName(u"music_animals_label6")
-
-        self.verticalLayout_16.addWidget(self.music_animals_label6)
-
-        self.music_animals_slider6 = QSlider(self.verticalWidget1)
-        self.music_animals_slider6.setObjectName(u"music_animals_slider6")
-        self.music_animals_slider6.setOrientation(Qt.Orientation.Vertical)
-
-        self.verticalLayout_16.addWidget(self.music_animals_slider6)
-
-
-        self.music_layout.addWidget(self.verticalWidget1)
-
-        self.horizontalSpacer_42 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.music_layout.addItem(self.horizontalSpacer_42)
-
 
         self.verticalLayout_20.addWidget(self.music_animals_widget)
 
@@ -1599,7 +1565,6 @@ class Ui_MainWindow(object):
         self.music_animals_label3.setText(QCoreApplication.translate("MainWindow", u"3", None))
         self.music_animals_label4.setText(QCoreApplication.translate("MainWindow", u"4", None))
         self.music_animals_label5.setText(QCoreApplication.translate("MainWindow", u"5", None))
-        self.music_animals_label6.setText(QCoreApplication.translate("MainWindow", u"6", None))
         self.identify_silence_btn.setText(QCoreApplication.translate("MainWindow", u"Identify Silence", None))
         self.silence_start_label.setText(QCoreApplication.translate("MainWindow", u"From:", None))
         self.silence_start_time_edit.setDisplayFormat(QCoreApplication.translate("MainWindow", u"mm:ss.z", None))
