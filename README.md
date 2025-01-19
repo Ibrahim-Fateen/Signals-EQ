@@ -2,18 +2,18 @@
 
 **A Python application built with PyQt to allow for offline signal processing using an audio's FT.**
 
-## Demo
-https://github.com/user-attachments/assets/8b62efe9-3e9a-4d44-9d03-510f1caa7445
-
 ## Features
-- Removing noise from an audio signal using a weiner filter
-     ![Weiner Filter](
-- Equalizing an audio signal using a uniform equalizer
-     ![Equalizer](
-- Removing animal sounds and certain instruments from a music file
-     ![Animal Sounds Filtering](
-- Removing vowels and certain instruments from a music file
-     ![Vowels Filtering](
+- Reducing noise from an audio signal using a weiner filter
+- Multiple eq modes including:
+     - Equalizing a signal using a uniform equalizer
+          
+
+https://github.com/user-attachments/assets/54fb1b2d-474d-4b80-966a-b84212e6ced9
+
+
+
+     - Removing animal sounds and certain instruments from a music file
+     - Removing vowels and certain instruments from a music file
 
 ## Installation      
 1. Clone the repository
