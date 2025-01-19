@@ -4,22 +4,23 @@
 
 ## Features
 - Reducing noise from an audio signal using a weiner filter
+
+
+https://github.com/user-attachments/assets/7e42a34e-2681-4376-9090-ca0e78cf1e7d
+
+
 - Multiple eq modes including:
-     - Equalizing a signal using a uniform equalizer
-          
-
-https://github.com/user-attachments/assets/54fb1b2d-474d-4b80-966a-b84212e6ced9
-
-
-
      - Removing animal sounds and certain instruments from a music file
      - Removing vowels and certain instruments from a music file
+     - Equalizing a signal using a uniform equalizer
+  
+https://github.com/user-attachments/assets/54fb1b2d-474d-4b80-966a-b84212e6ced9
 
 ## Installation      
 1. Clone the repository
    ```bash
-      git clone https://github.com/MohamedHisham20/DSP_equalizer.git
-      cd DSP_equalizer
+   git clone https://github.com/MohamedHisham20/DSP_equalizer.git
+   cd DSP_equalizer
    ```
 2. Install the required packages
    ```bash
