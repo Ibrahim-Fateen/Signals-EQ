@@ -19,8 +19,8 @@ https://github.com/user-attachments/assets/54fb1b2d-474d-4b80-966a-b84212e6ced9
 ## Installation      
 1. Clone the repository
    ```bash
-   git clone https://github.com/MohamedHisham20/DSP_equalizer.git
-   cd DSP_equalizer
+   git clone https://github.com/Ibrahim-Fateen/Signals-EQ.git
+   cd Signals-EQ
    ```
 2. Install the required packages
    ```bash
